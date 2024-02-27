@@ -40,7 +40,7 @@ public class PersonService
                 $"WHERE B.PersonType = '{personType}'", Map);
             return result;
         }catch (Exception ex){
-            Console.WriteLine($"JustError: {ex.Message}");
+            Console.WriteLine($"Error message: {ex.Message}");
         }
         return null;
     }
