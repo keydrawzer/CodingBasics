@@ -44,6 +44,23 @@ public class PersonService
         }
         return null;
     }
+
+    public List<PersonModel>? GetPersonByNameAndPersonType(string name, string personType){
+        try{
+            var result = _connection.GetResultsFromQuery<PersonModel>(
+                "SELECT * " +
+                $"FROM [AdventureWorks2022].[HumanResources].[vEmployee] A " +
+                $"INNER JOIN Person.Person B ON A.BusinessEntityID = B.BusinessEntityID " +
+                $"WHERE " +
+                $"    ('{name}' ='' OR '{name}' IS NULL OR CONCAT(A.FirstName, ' ', A.MiddleName, ' ', A.LastName) LIKE '%{name}%') " +
+                $"    AND " +
+                $"    ('{personType}' = '' OR '{personType}' IS NULL OR B.PersonType = '{personType}')", Map);
+            return result;
+        }catch (Exception ex){
+            Console.WriteLine($"JustError: {ex.Message}");
+        }
+        return null;
+    }
     public PersonModel Map(IDataRecord record){
         PersonModel person = new PersonModel();
             person.BusinessEntityID = (int)record["BusinessEntityID"];
