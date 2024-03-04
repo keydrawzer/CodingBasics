@@ -38,7 +38,7 @@ public class DataClient
             while (reader.Read())
             {
                // Map data to instances of T (you need to implement this)
-                var item = parseMethod(reader);
+                var item = parseMethod(reader);                                
                 results.Add(item);
             }
             connection.Close();
