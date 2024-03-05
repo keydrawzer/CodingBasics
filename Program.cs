@@ -40,6 +40,8 @@ public class Program
         => Results.Ok(productService.GetProductByNameAndCategoryType(name, catType)));
         //Sales methods
         app.MapGet("/sales", (SalesService salesService) => Results.Ok(salesService.GetAll()));
+        app.MapGet("/sales/GetByNameAndYear", (SalesService salesService, [FromQuery] string name, string year) 
+        => Results.Ok(salesService.GetSalesByNameAndYear(name, year)));
         app.Run();
     }
 }
