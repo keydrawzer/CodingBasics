@@ -36,7 +36,7 @@ public class SalesService
         }
         return null;
     }
-    
+
     public List<SalesModel>? GetSalesByNameAndYear(string name, string year){
         try{
             var result = _connection.GetResultsFromQuery<SalesModel>(
@@ -78,7 +78,6 @@ public class SalesService
             sales.SalesLastYear = record["SalesLastYear"] as decimal?;
             sales.YearSelected = record.GetName(record.FieldCount - 1);
             sales.YearSelectedValue = record.GetValue(record.FieldCount - 1) as decimal?;
-
 
         return sales;
             
