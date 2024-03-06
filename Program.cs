@@ -1,3 +1,4 @@
+using CodingBasicsAPI;
 using Microsoft.AspNetCore.Mvc;
 
 public class Program
@@ -17,7 +18,14 @@ public class Program
                     .AllowAnyHeader()
                     .AllowAnyMethod());
         });
+        var host = Host.CreateDefaultBuilder(args)
+          .ConfigureWebHostDefaults(webBuilder =>
+          {
+              webBuilder.UseStartup<Startup>(); // This line specifies that your application should use the Startup class
+          })
+          .Build();
 
+        host.Run();
 
         var app = builder.Build();
         app.UseCors("AllowAll");
