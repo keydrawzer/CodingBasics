@@ -8,6 +8,7 @@ builder.Services.AddEndpointsApiExplorer();
         .AddSingleton<DataClient>()
         .AddSingleton<PersonService>()
         .AddSingleton<ProductService>()
+        .AddSingleton<SalesService>()
         .AddCors(options =>
         {
             options.AddPolicy("AllowAll",

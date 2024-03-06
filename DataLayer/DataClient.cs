@@ -8,6 +8,7 @@ public class DataClient
 {
     private SqlConnection connection;
 
+
     public DataClient(IConfiguration configuration){
         connection = new SqlConnection(configuration.GetConnectionString("localServer"));
     }
