@@ -36,7 +36,7 @@ public class PersonController : ControllerBase
         return Ok(people);
     }
 
-     [HttpGet("{type}")]
+    [HttpGet("{type}")]
     public IActionResult GetPersonType(string type)
     {
         var people = _personService.GetPersonByPersonType(type);
@@ -47,7 +47,7 @@ public class PersonController : ControllerBase
         return Ok(people);
     }
 
-        [HttpGet("{name}/{personType}")]
+    [HttpGet("{name}/{personType}")]
     public IActionResult GetPersonByNameAndPersonType(string name, string personType)
     {
         var people = _personService.GetPersonByNameAndPersonType(name, personType);

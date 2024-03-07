@@ -8,23 +8,24 @@ using System.Collections.Generic;
 public class SalesController : ControllerBase
 {
     private readonly SalesService _salesService;
-  
+
 
     public SalesController(SalesService salesService)
     {
         _salesService = salesService;
-      
+
     }
 
     [HttpGet("sales-per-vendor")]
     public IActionResult GetSalesWithSalesPerson()
     {
         var sales = _salesService.GetSalesWithSalesPerson();
-        if (sales == null || sales.Count == 0){
-             return NotFound("No sales found.");
+        if (sales == null || sales.Count == 0)
+        {
+            return NotFound("No sales found.");
         }
 
-    
+
         return Ok(sales);
     }
 }
