@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CodingBasics.Models;
+﻿namespace CodingBasics.Models;
 
 public partial class VProductAndDescription
 {
