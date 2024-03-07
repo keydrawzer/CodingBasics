@@ -17,50 +17,72 @@ namespace CodingBasics.Controllers
 
         [HttpGet]
         [Route("")]
-        public ActionResult<IEnumerable<Person>> GetAll()
+        public ActionResult<IEnumerable<VEmployee>> GetAll()
         {
-            return _context.Persons.Take(20).ToList();
+            return _context.VEmployees.ToList();
+
         }
 
         [HttpGet]
         [Route("name/{name}")]
-        public ActionResult<IEnumerable<Person>> GetByName(string name)
+        public ActionResult<IEnumerable<VEmployee>> GetByName(string name)
         {
 
-            var persons = _context.Persons.Where(person => EF.Functions.Like(person.FirstName, name) || EF.Functions.Like(person.MiddleName, name) || EF.Functions.Like(person.LastName, name)).ToList();
+            var persons = _context.VEmployees.Where(person => EF.Functions.Like(person.FirstName, name) || EF.Functions.Like(person.MiddleName, name) || EF.Functions.Like(person.LastName, name)).ToList();
 
             if (persons == null || persons.Count == 0)
             {
                 return NotFound();
             }
+
             return persons;
         }
 
         [HttpGet]
         [Route("type/{personType}")]
-        public ActionResult<IEnumerable<Person>> GetByPersonType(string personType)
+        public ActionResult<IEnumerable<VEmployee>> GetByPersonType(string personType)
         {
 
-            var persons = _context.Persons.Where(person => person.PersonType == personType).ToList();
+            var persons = _context.VEmployees
+            .Join(
+            _context.Persons,
+            employee => employee.BusinessEntityId,
+            person => person.BusinessEntityId,
+            (employee, person) => new { Employee = employee, Person = person })
+            .Where(joined => joined.Person.PersonType == personType)
+            .Select(joined => joined.Employee)
+            .ToList();
 
             if (persons == null || persons.Count == 0)
             {
                 return NotFound();
             }
+
             return persons;
         }
 
         [HttpGet]
         [Route("name/{personName}/type/{personType}")]
-        public ActionResult<IEnumerable<Person>> GetByPersonNameAndType(string personName, string personType)
+        public ActionResult<IEnumerable<VEmployee>> GetByPersonNameAndType(string personName, string personType)
         {
 
-            var persons = _context.Persons.Where(person => (EF.Functions.Like(person.FirstName, personName) || EF.Functions.Like(person.MiddleName, personName) || EF.Functions.Like(person.LastName, personName)) && person.PersonType == personType).ToList();
+            var persons = _context.VEmployees
+            .Join(
+            _context.Persons,
+            employee => employee.BusinessEntityId,
+            person => person.BusinessEntityId,
+            (employee, person) => new { Employee = employee, Person = person })
+            .Where(joined => joined.Person.PersonType == personType && (joined.Person.FirstName == personName || joined.Person.LastName == personName || joined.Person.MiddleName == personName))
+            .Select(joined => joined.Employee)
+            .ToList();
 
             if (persons == null || persons.Count == 0)
             {
                 return NotFound();
             }
+
+
+
             return persons;
         }
 
