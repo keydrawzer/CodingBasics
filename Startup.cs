@@ -40,6 +40,7 @@ namespace CodingBasics
 
             // Register services
             services.AddScoped<PersonService>(); // Person service
+            services.AddScoped<ProductService>(); // Product service
         }
 
        
