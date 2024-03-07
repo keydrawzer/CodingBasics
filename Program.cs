@@ -1,3 +1,7 @@
+
+using CodingBasics.Models;
+using CodingBasics.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 
@@ -9,6 +13,7 @@ builder.Services
     .AddSingleton<PersonService>()
     .AddSingleton<ProductService>()
     .AddSingleton<SalesService>()
+    .AddSingleton<AdventureWorks2022Context>()
     .AddCors(options =>
     {
         options.AddPolicy("AllowAll",

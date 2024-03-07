@@ -1,5 +1,6 @@
 namespace CodingBasics.Controllers;
 using AutoMapper;
+using CodingBasics.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
@@ -17,15 +18,36 @@ public class SalesController : ControllerBase
     }
 
     [HttpGet("sales-per-vendor")]
-    public IActionResult GetSalesWithSalesPerson()
+    public IActionResult GetAllSalesWithPersonnelName()
     {
-        var sales = _salesService.GetSalesWithSalesPerson();
-        if (sales == null || sales.Count == 0)
+        try
         {
-            return NotFound("No sales found.");
+            var salesData = _salesService.GetSalesSummaryBySalesPerson();
+            return Ok(salesData);
         }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
 
 
-        return Ok(sales);
+
+    [HttpGet]
+    public IActionResult GetSalesForSalesPerson(string salesPersonName, int year)
+    {
+        try
+        {
+            decimal totalSales = _salesService.GetSalesForSalesPerson(salesPersonName, year);
+            return Ok(totalSales);
+        }
+        catch (ArgumentException ex)
+        {
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
     }
 }

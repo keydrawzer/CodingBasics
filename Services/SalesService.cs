@@ -1,66 +1,68 @@
-using AutoMapper;
-using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
-using System.Data;
+using System;
+using System.Linq;
+using CodingBasics.Models;
 
-public class SalesService
+namespace CodingBasics.Services
 {
-
-    private DataClient _connection;
-
-    public SalesService(DataClient connection)
+    public class SalesSummary
     {
-        _connection = connection;
+        public string SalesPersonName { get; set; }
+        public decimal TotalSales { get; set; }
     }
-
-
-    public List<SalesWithSalesPersonModel> GetSalesWithSalesPerson()
+    public class SalesService
     {
-        string sqlQuery = @"
-        SELECT
-            soh.SalesOrderID,
-            soh.OrderDate,
-            sp.BusinessEntityID AS SalesPersonID,
-            p.FirstName + ' ' + p.LastName AS SalesPersonName,
-            sod.ProductID,
-            sod.OrderQty,
-            sod.UnitPrice,
-            sod.LineTotal
-        FROM
-            Sales.SalesOrderHeader soh
-        INNER JOIN
-            Sales.SalesOrderDetail sod
-        ON
-            soh.SalesOrderID = sod.SalesOrderID
-        INNER JOIN
-            Sales.SalesPerson sp
-        ON
-            soh.SalesPersonID = sp.BusinessEntityID
-        INNER JOIN
-            Person.Person p
-        ON
-            sp.BusinessEntityID = p.BusinessEntityID
-        ";
-
-        var salesWithSalesPersonList = _connection.GetResultsFromQuery(sqlQuery, ParseSalesData);
-        return salesWithSalesPersonList;
-    }
+        private readonly AdventureWorks2022Context _context;
 
 
-
-    public SalesWithSalesPersonModel ParseSalesData(IDataRecord record)
-    {
-        return new SalesWithSalesPersonModel
+        public SalesService(AdventureWorks2022Context context)
         {
-            SalesOrderID = record["SalesOrderID"] as int?,
-            OrderDate = record.IsDBNull(record.GetOrdinal("OrderDate")) ? null : (DateTime?)record["OrderDate"],
-            SalesPersonID = record["SalesPersonID"] as int?,
-            SalesPersonName = record["SalesPersonName"] as string,
-            ProductID = record["ProductID"] as int?,
-            OrderQty = record["OrderQty"] as int?,
-            UnitPrice = record.IsDBNull(record.GetOrdinal("UnitPrice")) ? null : (decimal?)record["UnitPrice"],
-            LineTotal = record.IsDBNull(record.GetOrdinal("LineTotal")) ? null : (decimal?)record["LineTotal"]
-        };
-    }
+            _context = context;
+        }
 
+        public IQueryable<SalesSummary> GetSalesSummaryBySalesPerson()
+        {
+            var salesSummary = _context.SalesOrderHeaders
+                .Join(
+                    _context.People,
+                    soh => soh.SalesPersonId,
+                    p => p.BusinessEntityId,
+                    (soh, p) => new
+                    {
+                        SalesPersonName = p.FirstName + " " + p.LastName,
+                        TotalSales = soh.TotalDue
+                    })
+                .GroupBy(x => x.SalesPersonName)
+                .Select(g => new SalesSummary
+                {
+                    SalesPersonName = g.Key,
+                    TotalSales = g.Sum(x => x.TotalSales)
+                });
+
+            return salesSummary;
+        }
+
+
+        public decimal GetSalesForSalesPerson(string salesPersonName, int year)
+        {
+            // With the provided name, find the BusinessEntityId
+            int? salesPersonId = _context.People
+             .Where(sp => (sp.FirstName + " " + sp.LastName) == salesPersonName)
+             .Select(sp => (int?)sp.BusinessEntityId)
+             .FirstOrDefault();
+
+            if (salesPersonId.HasValue)
+            {
+                decimal totalSales = _context.SalesOrderHeaders
+                    .Where(soh => soh.SalesPersonId == salesPersonId &&
+                                   soh.OrderDate.Year == year)
+                    .Sum(soh => soh.TotalDue);
+
+                return totalSales;
+            }
+            else
+            {
+                throw new ArgumentException("Sales person not found.", nameof(salesPersonName));
+            }
+        }
+    }
 }
