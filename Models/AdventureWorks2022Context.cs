@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CodingBasics.Models;
 
 public partial class AdventureWorks2022Context : DbContext

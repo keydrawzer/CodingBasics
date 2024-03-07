@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
+
 namespace CodingBasics.Models;
 
 /// <summary>
@@ -63,7 +64,7 @@ public partial class SalesOrderHeader
     public string SalesOrderNumber { get; set; } = null!;
 
     /// <summary>
-    /// Customer purchase order number reference. 
+    /// Customer purchase order number reference.
     /// </summary>
     [StringLength(25)]
     public string? PurchaseOrderNumber { get; set; }

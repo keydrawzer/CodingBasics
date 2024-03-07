@@ -1,18 +1,18 @@
-using System;
-using System.Linq;
-using CodingBasics.Models;
-
 namespace CodingBasics.Services
 {
+    using System;
+    using System.Linq;
+    using CodingBasics.Models;
+
     public class SalesSummary
     {
         public string SalesPersonName { get; set; }
+
         public decimal TotalSales { get; set; }
     }
     public class SalesService
     {
         private readonly AdventureWorks2022Context _context;
-
 
         public SalesService(AdventureWorks2022Context context)
         {
@@ -29,13 +29,13 @@ namespace CodingBasics.Services
                     (soh, p) => new
                     {
                         SalesPersonName = p.FirstName + " " + p.LastName,
-                        TotalSales = soh.TotalDue
+                        TotalSales = soh.TotalDue,
                     })
                 .GroupBy(x => x.SalesPersonName)
                 .Select(g => new SalesSummary
                 {
                     SalesPersonName = g.Key,
-                    TotalSales = g.Sum(x => x.TotalSales)
+                    TotalSales = g.Sum(x => x.TotalSales),
                 });
 
             return salesSummary;

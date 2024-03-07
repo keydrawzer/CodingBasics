@@ -1,3 +1,5 @@
+using CodingBasics.Models;
+using CodingBasics.Services;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -15,46 +17,31 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public ActionResult<IEnumerable<Person>> GetAllPersons()
     {
-        var people = _personService.GetAll();
-        if (people == null || people.Count == 0)
-        {
-            return NotFound("No people found.");
-        }
-        return Ok(people);
+        var persons = _personService.GetAllPersons().ToList();
+        return Ok(persons);
     }
 
     [HttpGet("{name}")]
-    public IActionResult GetPersonByName(string name)
+    public IActionResult GetPersonsByName(string name)
     {
-        var people = _personService.GetPersonByName(name);
-        if (people == null || people.Count == 0)
-        {
-            return NotFound($"No people found with the name '{name}'.");
-        }
-        return Ok(people);
+        var persons = _personService.GetPersonsByName(name);
+        return Ok(persons);
     }
 
     [HttpGet("{type}")]
-    public IActionResult GetPersonType(string type)
+    public IActionResult GetPersonsType(string type)
     {
-        var people = _personService.GetPersonByPersonType(type);
-        if (people == null || people.Count == 0)
-        {
-            return NotFound($"No people found with the type '{type}'.");
-        }
-        return Ok(people);
+        var persons = _personService.GetPersonsByType(type);
+        return Ok(persons);
     }
 
-    [HttpGet("{name}/{personType}")]
-    public IActionResult GetPersonByNameAndPersonType(string name, string personType)
+    [HttpGet("filter")]
+    public IActionResult GetPersonsByNameAndType([FromQuery] string name, [FromQuery] string type)
     {
-        var people = _personService.GetPersonByNameAndPersonType(name, personType);
-        if (people == null || people.Count == 0)
-        {
-            return NotFound($"No people found with the name '{name}' and person type '{personType}'.");
-        }
-        return Ok(people);
+        var persons = _personService.GetPersonsByNameAndType(name, type);
+        return Ok(persons);
     }
+
 }
