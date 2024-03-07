@@ -7,9 +7,10 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services
-        .AddSingleton<DataClient>()
+        .AddSingleton<DataClient>() //Singleton es una instancia unica
         .AddSingleton<PersonService>()
-        .AddCors(options =>
+        .AddSingleton<ProductsService>()
+        .AddCors(options => //AddCors aplicacion necesaria
         {
             options.AddPolicy("AllowAll",
                 builder => builder
@@ -30,6 +31,9 @@ public class Program
         app.MapGet("/person/GetByNameAndType", (PersonService personService, [FromQuery] string name, string emplType) => Results.Ok(personService.GetPersonByNameAndPersonType(name, emplType)));
         //Person methods
         //Products methods
+        app.MapGet("/products", (ProductsService productsService) => Results.Ok(productsService.GetAll()));
+        app.MapGet("/products/GetByName", (ProductsService ProductsService, [FromQuery] string name) => Results.Ok(ProductsService.GetProductsByName(name)));
+        app.MapGet("/products/GetByCategory", (ProductsService ProductsService, [FromQuery] string categoryType) => Results.Ok(ProductsService.GetProductsByCategory(categoryType)));
         app.Run();
     }
 }
