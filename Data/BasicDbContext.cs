@@ -16,6 +16,16 @@ namespace CodingBasics.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<ProductSubcategory> ProductSubcategories { get; set; }
+        public DbSet<SalesPerson> SalesPersons { get; set; }
+        public DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
 
+        // Configure the relationship between SalesOrderHeader and Employee entities
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<SalesOrderHeader>()
+                .HasOne<Employee>()
+                .WithMany()
+                .HasForeignKey(soh => soh.SalesPersonID);
+        }
     }
 }

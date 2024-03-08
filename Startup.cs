@@ -37,10 +37,10 @@ namespace CodingBasics
             services.AddDbContext<BasicDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("localServer")));
 
-
             // Register services
             services.AddScoped<PersonService>(); // Person service
             services.AddScoped<ProductService>(); // Product service
+            services.AddScoped<SalesPersonService>(); // SalesPerson service
         }
 
        
