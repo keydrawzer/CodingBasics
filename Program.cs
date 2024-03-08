@@ -12,8 +12,8 @@ public class Program
         var connectionString = builder.Configuration.GetConnectionString("localServer");
 
         builder.Services.AddDbContext<CodingBasicsDbContext>(options => options.UseSqlServer(connectionString));
-        builder.Services.AddScoped<ISalesOrderHeaderRepository, SalesOrderHeaderRepository>();
-        builder.Services.AddScoped<ISalesOrderHeaderService, SalesOrderHeaderService>();
+        builder.Services.AddScoped<ISalesRepository, SalesRepository>();
+        builder.Services.AddScoped<ISalesService, SalesService>();
 
         builder.Services
         .AddSingleton<DataClient>()
@@ -58,24 +58,22 @@ public class Program
         var salesRoutes = app.MapGroup("/sales");
 
         // GET /
-        salesRoutes.MapGet("/", async (ISalesOrderHeaderService salesService) =>
-        {
-            var result = await salesService.GetAll();
-            return Results.Ok(result);
-        });
+        salesRoutes.MapGet("/",
+            async (ISalesService salesService) =>
+            Results.Ok(await salesService.GetAll()));
 
         // GET /GetSalesByPersonAndYear
         salesRoutes.MapGet(
             "/GetSalesByPersonAndYear",
             async (
-                ISalesOrderHeaderService salesService,
+                ISalesService salesService,
                 [FromQuery] string name,
-                [FromQuery] int year
-        ) =>
-        {
-            var result = await salesService.GetSalesByPersonAndYear(name, year);
-            return Results.Ok(result);
-        });
+                [FromQuery] int year) =>
+            Results.Ok(await salesService.GetSalesByPersonAndYear(name, year)));
+
+        salesRoutes.MapGet("/GetSalesPeopleNames",
+            async (ISalesService salesService) =>
+            Results.Ok(await salesService.GetSalesPersonNames()));
 
         app.Run();
     }

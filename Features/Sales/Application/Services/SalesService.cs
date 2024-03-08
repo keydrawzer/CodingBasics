@@ -4,17 +4,18 @@ using CodingBasics.Features.Sales.Infrastructure.Repositories;
 
 namespace CodingBasics.Features.Sales.Application.Services
 {
-    public interface ISalesOrderHeaderService
+    public interface ISalesService
     {
         Task<List<SalesOrderHeader>?> GetAll();
         Task<List<SalesOrderHeader>?> GetSalesByPersonAndYear(string name, int year);
+        Task<List<string>?> GetSalesPersonNames();
     }
 
-    public class SalesOrderHeaderService : ISalesOrderHeaderService
+    public class SalesService : ISalesService
     {
-        private readonly ISalesOrderHeaderRepository _repository;
+        private readonly ISalesRepository _repository;
 
-        public SalesOrderHeaderService(ISalesOrderHeaderRepository repository)
+        public SalesService(ISalesRepository repository)
         {
             _repository = repository;
         }
@@ -27,6 +28,11 @@ namespace CodingBasics.Features.Sales.Application.Services
         public async Task<List<SalesOrderHeader>?> GetSalesByPersonAndYear(string name, int year)
         {
             return await _repository.FilterSalesByPersonAndYear(name, year);
+        }
+
+        public async Task<List<string>?> GetSalesPersonNames()
+        {
+            return await _repository.GetSalesPeopleNames();
         }
     }
 }

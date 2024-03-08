@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodingBasics.Features.Sales.Infrastructure.Repositories;
 
-public interface ISalesOrderHeaderRepository
+public interface ISalesRepository
 {
     Task<List<SalesOrderHeader>?> GetAllSalesOrderHeaders();
     Task<List<SalesOrderHeader>?> FilterSalesByPersonAndYear(string personName, int year);
+    Task<List<string>?> GetSalesPeopleNames();
 }
 
-public class SalesOrderHeaderRepository(CodingBasicsDbContext dbContext) : ISalesOrderHeaderRepository
+public class SalesRepository(CodingBasicsDbContext dbContext) : ISalesRepository
 {
     private readonly CodingBasicsDbContext _dbContext = dbContext;
 
@@ -49,5 +50,12 @@ public class SalesOrderHeaderRepository(CodingBasicsDbContext dbContext) : ISale
             Console.WriteLine($"JustError: {ex.Message}");
         }
         return null;
+    }
+
+    public async Task<List<string>?> GetSalesPeopleNames()
+    {
+        return await _dbContext.VSalesPeople
+            .Select(x => x.FirstName + " " + x.MiddleName + " " + x.LastName)
+            .ToListAsync();
     }
 }
