@@ -10,6 +10,8 @@ public class Program
         .AddSingleton<DataClient>() //Singleton es una instancia unica
         .AddSingleton<PersonService>()
         .AddSingleton<ProductsService>()
+        .AddSingleton<SalesOverService>()
+        .AddSingleton<SalesPYService>()
         .AddCors(options => //AddCors aplicacion necesaria
         {
             options.AddPolicy("AllowAll",
@@ -34,6 +36,9 @@ public class Program
         app.MapGet("/products", (ProductsService productsService) => Results.Ok(productsService.GetAll()));
         app.MapGet("/products/GetByName", (ProductsService ProductsService, [FromQuery] string name) => Results.Ok(ProductsService.GetProductsByName(name)));
         app.MapGet("/products/GetByCategory", (ProductsService ProductsService, [FromQuery] string categoryType) => Results.Ok(ProductsService.GetProductsByCategory(categoryType)));
+        //Sales methods
+        app.MapGet("/sales", (SalesOverService salesService) => Results.Ok(salesService.GetAll()));
+        app.MapGet("/sales/GetByPersonAndYear", (SalesPYService salespyServices, [FromQuery] string salesPersonName, int year) => Results.Ok(salespyServices.GetSalesByPersonAndYear(salesPersonName, year)));
         app.Run();
     }
 }

@@ -53,42 +53,21 @@ public ProductsModel Map(IDataRecord record)
     products.Name = record["Name"] as string;
     products.ProductNumber = record["ProductNumber"] as string;
     products.Color = record["Color"] as string;
-
-    if (record["StandardCost"] != DBNull.Value)
-    {
-        products.StandardCost = (decimal)record["StandardCost"];
-    }
-    else
-    {
-        products.StandardCost = null; // O asignar un valor predeterminado, dependiendo de tus requerimientos
-    }
-
-    // Verificar si el valor de ListPrice es DBNull antes de asignarlo
-    if (record["ListPrice"] != DBNull.Value)
-    {
-        products.ListPrice = (decimal)record["ListPrice"];
-    }
-    else
-    {
-        products.ListPrice = null; // O asignar un valor predeterminado, dependiendo de tus requerimientos
-    }
-    
+    products.StandardCost = (decimal)record["StandardCost"];
+    products.ListPrice = (decimal)record["ListPrice"];
     products.Size = record["Size"] as string;
 
-    // Verificar si el valor de Weight es DBNull antes de asignarlo
-    if (record["Weight"] != DBNull.Value)
-    {
+     if (record["Weight"] != DBNull.Value)
+     {
         products.Weight = (decimal)record["Weight"];
-    }
-    else
-    {
-        products.Weight = null; // O asignar un valor predeterminado, dependiendo de tus requerimientos
-    }
+     }
+     else
+     {
+         products.Weight = null;
+     }
 
     products.Class = record["Class"] as string;
     products.Style = record["Style"] as string;
-    //products.ProductCategoryID = (int) record["ProductCategoryID"];
-    //products.NameCategory = record["NameCategory"] as string;
 
     return products;
 }
