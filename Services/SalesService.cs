@@ -46,7 +46,6 @@ namespace CodingBasics.Services
 
         public decimal GetSalesForSalesPerson(string salesPersonName, int year)
         {
-            // With the provided name, find the BusinessEntityId
             int? salesPersonId = _context.People
              .Where(sp => (sp.FirstName + " " + sp.LastName) == salesPersonName)
              .Select(sp => (int?)sp.BusinessEntityId)
