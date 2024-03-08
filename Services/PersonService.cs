@@ -30,7 +30,6 @@ public class PersonService
         }
         return null;
     }
-
     public List<PersonModel>? GetPersonByPersonType(string personType){
         try{
             var result = _connection.GetResultsFromQuery<PersonModel>(
