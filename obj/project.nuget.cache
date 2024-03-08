@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "q9mjvqWgP9bq0btD4kxmCDO5eZFKkD/OFwfRYKBJDTnKR190PXa5sTAja7anpI1CyOhI8T/L/T1CRCeO0o3VSQ==",
+  "dgSpecHash": "j8OdpnaJ7CRwEsxTdyufFmguHl9WF4oL1B00Mnrf8qXmvd1oEpZ6UesSeeZ1TeE+yFXYO9r0xZ7iN/h/R4Tjbw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\drher\\Desktop\\RSM-US\\Oficial\\CodingBasics\\CodingBasics.csproj",
+  "projectFilePath": "C:\\Users\\drher\\Desktop\\RSM-US\\NewExample\\CodingBasics\\CodingBasics.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\drher\\.nuget\\packages\\azure.core\\1.35.0\\azure.core.1.35.0.nupkg.sha512",
     "C:\\Users\\drher\\.nuget\\packages\\azure.identity\\1.10.3\\azure.identity.1.10.3.nupkg.sha512",

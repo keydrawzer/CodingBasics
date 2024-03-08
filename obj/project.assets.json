@@ -4089,11 +4089,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\drher\\Desktop\\RSM-US\\Oficial\\CodingBasics\\CodingBasics.csproj",
+      "projectUniqueName": "C:\\Users\\drher\\Desktop\\RSM-US\\NewExample\\CodingBasics\\CodingBasics.csproj",
       "projectName": "CodingBasics",
-      "projectPath": "C:\\Users\\drher\\Desktop\\RSM-US\\Oficial\\CodingBasics\\CodingBasics.csproj",
+      "projectPath": "C:\\Users\\drher\\Desktop\\RSM-US\\NewExample\\CodingBasics\\CodingBasics.csproj",
       "packagesPath": "C:\\Users\\drher\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\drher\\Desktop\\RSM-US\\Oficial\\CodingBasics\\obj\\",
+      "outputPath": "C:\\Users\\drher\\Desktop\\RSM-US\\NewExample\\CodingBasics\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\drher\\AppData\\Roaming\\NuGet\\NuGet.Config"
