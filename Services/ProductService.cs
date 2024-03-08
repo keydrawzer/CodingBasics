@@ -34,11 +34,11 @@ public class ProductService
     public List<ProductModel>? GetProductByCategoryType(string categoryType){
         try{
             var result = _connection.GetResultsFromQuery<ProductModel>(
-                "SELECT a.ProductID, a.Name, a.ProductNumber " +
-                "FROM [Production].[Product] a " +
-                "INNER JOIN [Production].[ProductSubcategory]  b ON a.ProductSubcategoryID = b.ProductSubcategoryID " +
-                "INNER JOIN [Production].[ProductCategory] c ON b.ProductCategoryID = c.ProductCategoryID " +
-                $"WHERE c.Name LIKE '%{categoryType}%'", Map);
+                "SELECT prod.ProductID, prod.Name, prod.ProductNumber " +
+                "FROM Production.Product prod " +
+                "INNER JOIN Production.ProductSubcategory subcat ON prod.ProductSubcategoryID = subcat.ProductSubcategoryID "+
+                "INNER JOIN Production.ProductCategory cat ON subcat.ProductCategoryID = cat.ProductCategoryID "+ 
+                 $"WHERE cat.Name LIKE '%{categoryType}%'", Map);
             return result;
         }catch (Exception ex){
             Console.WriteLine($"Error message: {ex.Message}");
@@ -51,9 +51,6 @@ public class ProductService
             product.ProductID = (int)record["ProductID"];
             product.Name = record["Name"] as string;
             product.ProductNumber = record["ProductNumber"] as string; 
-            product.ProductSubcategoryID = (int)record["ProductSubcategoryID"];
-            product.ProductCategoryID = (int)record["ProductCategoryID"];
-            //product.NameCategory = record["Name"] as string;
             return product;   
     }
     

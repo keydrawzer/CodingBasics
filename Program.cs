@@ -38,7 +38,7 @@ public class Program
         app.MapGet("/product/GetByCatType", (ProductService productService, [FromQuery] string categoryType) => Results.Ok(productService.GetProductByCategoryType(categoryType)));
         //sales method
         app.MapGet("/sales", (SalesService salesService) => Results.Ok(salesService.GetAll()));
-        app.MapGet("/sale/GetByNameAndYear", (EmployeeSalesService employeeSalesService, [FromQuery] string name, [FromQuery] int year) => 
+        app.MapGet("/sale/GetByNameAndYear", (EmployeeSalesService employeeSalesService, [FromQuery] string name, DateTime year) => 
         Results.Ok(employeeSalesService.GetsalesByNameAndyear(name, year)));
 
 

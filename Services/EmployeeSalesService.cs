@@ -7,7 +7,7 @@ public class EmployeeSalesService
     public EmployeeSalesService(DataClient connection){
         _connection = connection;
     }
-    public List<EmployeeSalesModel>? GetsalesByNameAndyear(string name, int year){
+    public List<EmployeeSalesModel>? GetsalesByNameAndyear(string name, DateTime year){
         try{
             var result = _connection.GetResultsFromQuery<EmployeeSalesModel>(
                 "SELECT soh.SalesOrderID, soh.OrderDate, soh.DueDate, soh.ShipDate, soh.Status, "+
@@ -18,10 +18,10 @@ public class EmployeeSalesService
                 "LEFT JOIN Sales.SalesPerson sp ON soh.SalesPersonID = sp.BusinessEntityID "+
                 "INNER JOIN HumanResources.Employee hr ON sp.BusinessEntityID = hr.BusinessEntityID " +
                 "INNER JOIN Person.Person pe ON hr.BusinessEntityID =pe.BusinessEntityID " +
-                $"WHERE " + 
+                "WHERE " + 
                 $"    ('{name}' ='' OR '{name}' IS NULL OR CONCAT(pe.FirstName, ' ', pe.MiddleName, ' ', pe.LastName) LIKE '%{name}%') " +
                 $"    AND " +
-                $"    ('{year}' = '' OR '{year}' IS NULL OR soh.OrderDate = '{year}')", Map);
+                $"    ('{ year }' = '' OR '{year}' IS NULL OR soh.OrderDate = '{year}')", Map);
             return result;
         }catch (Exception ex){
             Console.WriteLine($"JustError: {ex.Message}");
@@ -40,8 +40,6 @@ public class EmployeeSalesService
             Emple.CustomerID = (int)record["CustomerID"];
             Emple.SalesYTD = record.IsDBNull(record.GetOrdinal("SalesYTD")) ? 0m : record.GetDecimal(record.GetOrdinal("SalesYTD"));
             Emple.SalesLastYear = record.IsDBNull(record.GetOrdinal("SalesLastYear")) ? 0m : record.GetDecimal(record.GetOrdinal("SalesLastYear"));           
-            Emple.BusinessEntityID = (int)record["BusinessEntityID"];
-            Emple.Title = record["Title"] as string;
             Emple.FirstName = record["FirstName"] as string;
             Emple.MiddleName = record["MiddleName"] as string;
             return Emple;
