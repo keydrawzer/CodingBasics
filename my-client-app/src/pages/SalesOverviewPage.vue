@@ -29,20 +29,6 @@ async function fetchData() {
     }
 }
 
-// async function searchByNameAndYear(name, year) {
-//     try {
-//         state.loading = true;
-//         const response = await axios.get(
-//             `/sales-person/GetByNameAndYear?name=${name}&year=${year}`
-//         );
-//         state.salesPersons = response.data;
-//     } catch (error) {
-//         console.error(error);
-//     } finally {
-//         state.loading = false;
-//     }
-// }
-
 onMounted(async () => {
     await fetchData();
 });
