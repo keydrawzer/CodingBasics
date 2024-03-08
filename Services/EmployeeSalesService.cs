@@ -18,7 +18,7 @@ public class EmployeeSalesService
                 "LEFT JOIN Sales.SalesPerson sp ON soh.SalesPersonID = sp.BusinessEntityID "+
                 "INNER JOIN HumanResources.Employee hr ON sp.BusinessEntityID = hr.BusinessEntityID " +
                 "INNER JOIN Person.Person pe ON hr.BusinessEntityID =pe.BusinessEntityID " +
-                $"WHERE " +
+                $"WHERE " + 
                 $"    ('{name}' ='' OR '{name}' IS NULL OR CONCAT(pe.FirstName, ' ', pe.MiddleName, ' ', pe.LastName) LIKE '%{name}%') " +
                 $"    AND " +
                 $"    ('{year}' = '' OR '{year}' IS NULL OR soh.OrderDate = '{year}')", Map);
