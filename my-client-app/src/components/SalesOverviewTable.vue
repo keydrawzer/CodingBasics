@@ -5,13 +5,15 @@
                 <th>Territory</th>
                 <th>Shipped Orders</th>
                 <th>Cancelled Orders</th>
+                <th>Average Ship Days</th>
+                <th>Average Due Days</th>
                 <th>In-Person Orders</th>
                 <th>Online Orders</th>
-                <th>Ordered Quantity</th>
-                <th>Shipping Cost</th>
-                <th>Sub Total</th>
-                <th>Tax Amount</th>
-                <th>Total Due</th>
+                <th>Ordered Products</th>
+                <th>Shipping Cost Total</th>
+                <th>Orders Sub Total</th>
+                <th>Orders Tax Amount Total</th>
+                <th>Orders Total Due</th>
             </tr>
         </thead>
         <tbody>
@@ -19,6 +21,8 @@
                 <td>{{ salesData.territory }}</td>
                 <td>{{ integerFormatter.format(salesData.shippedOrders) }}</td>
                 <td>{{ integerFormatter.format(salesData.cancelledOrders) }}</td>
+                <td>{{ integerFormatter.format(salesData.averageShipDays) }}</td>
+                <td>{{ integerFormatter.format(salesData.averageDueDays) }}</td>
                 <td>{{ integerFormatter.format(salesData.inPersonOrders) }}</td>
                 <td>{{ integerFormatter.format(salesData.onlineOrders) }}</td>
                 <td>{{ integerFormatter.format(salesData.orderedQuantity) }}</td>
@@ -30,7 +34,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <td colspan="10">
+                <td colspan="12">
                     <div class="pagination">
                         <button @click="goToPage(state.currentPage - 1)" :disabled="state.currentPage === 1"
                             style="border: 0">
@@ -55,9 +59,11 @@
                 <th>Territory</th>
                 <th>Shipped Orders</th>
                 <th>Cancelled Orders</th>
+                <th>Average Ship Days</th>
+                <th>Average Due Days</th>
                 <th>In-Person Orders</th>
                 <th>Online Orders</th>
-                <th>Ordered Quantity</th>
+                <th>Ordered Products</th>
                 <th>Shipping Cost</th>
                 <th>Sub Total</th>
                 <th>Tax Amount</th>
@@ -66,7 +72,7 @@
         </thead>
         <tbody>
             <tr>
-                <td colspan="10">No results found.</td>
+                <td colspan="12">No results found.</td>
             </tr>
         </tbody>
     </table>
@@ -121,15 +127,16 @@ table {
     border-spacing: 0;
     border: 2px solid #ddd;
     border-radius: 8px;
-    overflow: hidden;
+    overflow: auto;
     align-self: flex-start;
+    display: block;
 }
 
 th,
 td {
     border-bottom: 1px solid #ddd;
     padding: 8px;
-    text-align: left;
+    text-align: center;
 }
 
 th {

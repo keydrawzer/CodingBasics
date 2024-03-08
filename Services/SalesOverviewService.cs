@@ -19,6 +19,8 @@ public class SalesOverviewService
                 " ,COUNT(case when soh.Status = 6 then 1 end) AS 'CancelledOrders'" +
                 " ,COUNT(case when soh.OnlineOrderFlag = 1 then 1 end) AS 'InPersonOrders'" +
                 " ,COUNT(case when soh.OnlineOrderFlag = 0 then 1 end) AS 'OnlineOrders'" +
+                " ,AVG(DATEDIFF(d,soh.OrderDate,soh.ShipDate)) AS 'AverageShipDays'" +
+                " ,AVG(DATEDIFF(d,soh.OrderDate,soh.DueDate)) AS 'AverageDueDays'" +
                 " ,SUM(sod.OrderQty) AS 'OrderedQuantity'" +
                 " ,SUM(soh.Freight) AS 'ShippingCost'" +
                 " ,SUM(soh.SubTotal) AS 'SubTotal'" +

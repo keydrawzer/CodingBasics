@@ -5,6 +5,8 @@ public class SalesOverviewModel
     public int? CancelledOrders { get; set; }
     public int? InPersonOrders { get; set; }
     public int? OnlineOrders { get; set; }
+    public int? AverageShipDays { get; set; }
+    public int? AverageDueDays { get; set; }
     public int? OrderedQuantity { get; set; }
     public decimal? ShippingCost { get; set; }
     public decimal? SubTotal { get; set; }
