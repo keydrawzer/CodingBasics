@@ -67,7 +67,7 @@ public partial class AdventureWorks2022Context : DbContext
 
     public virtual DbSet<Password> Passwords { get; set; }
 
-    public virtual DbSet<Person> People { get; set; }
+    public virtual DbSet<Person> Persons { get; set; }
 
     public virtual DbSet<PersonCreditCard> PersonCreditCards { get; set; }
 
