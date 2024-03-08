@@ -73,7 +73,6 @@
 	const props = defineProps({
 		persons: Array,
 	});
-
 	const state = reactive({
 		persons: computed(() => props.persons),
 		pageSize: 20,
