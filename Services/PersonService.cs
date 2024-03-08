@@ -10,7 +10,7 @@ public class PersonService
     }
     public List<PersonModel>? GetAll(){
         try{
-            var result = _connection.GetResultsFromQuery<PersonModel>("SELECT * FROM [HumanResources].[vEmployee]", Map);           
+            var result = _connection.GetResultsFromQuery<PersonModel>("SELECT * FROM HumanResources.vEmployee", Map);           
             return result;
         }catch (Exception ex){
             Console.WriteLine($"JustError: {ex.Message}");

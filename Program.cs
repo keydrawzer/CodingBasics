@@ -10,6 +10,7 @@ public class Program
         .AddSingleton<DataClient>()
         .AddSingleton<PersonService>()
         .AddSingleton<ProductService>()
+        .AddSingleton<SaleService>()
         .AddCors(options =>
         {
             options.AddPolicy("AllowAll",
@@ -17,6 +18,7 @@ public class Program
                     .AllowAnyOrigin()
                     .AllowAnyHeader()
                     .AllowAnyMethod());
+                    
         });
 
 
@@ -32,11 +34,19 @@ public class Program
         app.MapGet("/person/GetByNameAndType", (PersonService personService, [FromQuery] string name, string emplType) 
         => Results.Ok(personService.GetPersonByNameAndPersonType(name, emplType)));
         //Products methods
+        
         app.MapGet("/product", (ProductService productService) => Results.Ok(productService.GetAll()));
         app.MapGet("/product/GetByName", (ProductService productService, [FromQuery] string name) => Results.Ok(productService.GetProductsByName(name)));
         app.MapGet("/product/GetByCatType", (ProductService productService, [FromQuery] string catType) => Results.Ok(productService.GetProductByCategoryType(catType)));
         app.MapGet("/product/GetByNameAndType", (ProductService productService, [FromQuery] string name, string catType) 
         => Results.Ok(productService.GetProductByNameAndCategoryType(name, catType)));
+        
+
+        //Sales methods
+        app.MapGet("/SalesTest",() => "Esta es una pruba");
+        app.MapGet("/sale",(SaleService salesService) => Results.Ok(salesService.GetAll()));
+        app.MapGet("/sale/GetByNameAndYear",(SaleService saleService,[FromQuery] string name, string yearSale) => Results.Ok(saleService.GetBynameAndYear(name,yearSale)));
+
         app.Run();
     }
 }
