@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.Data.SqlClient;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
@@ -18,14 +17,7 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         string? traceId = Activity.Current?.Id ?? httpContext.TraceIdentifier;
 
-        _logger.LogError(
-            exception,
-            "\tTime: {ExceptionTime}\n\tTraceID: {TraceID}\n\tExceptionType: {ExceptionType}\n\tMessage: {Message}\n",
-            DateTime.Now,
-            traceId,
-            exception.GetType().ToString(),
-            exception.Message
-        );
+        LogException(exception, traceId, _logger);
 
         var (statusCode, title) = MapException(exception);
 
@@ -48,5 +40,31 @@ public class GlobalExceptionHandler : IExceptionHandler
             BadHttpRequestException => (StatusCodes.Status400BadRequest, exception.Message),
             _ => (StatusCodes.Status500InternalServerError, "Internal Server Error. We are working on it.")
         };
+    }
+
+    private static void LogException(Exception exception, string? traceId, ILogger<GlobalExceptionHandler> logger)
+    {
+        if (exception is BadHttpRequestException)
+        {
+            logger.LogWarning(
+                exception,
+                "\tTime: {ExceptionTime}\n\tTraceID: {TraceID}\n\tExceptionType: {ExceptionType}\n\tMessage: {Message}\n",
+                DateTime.Now,
+                traceId,
+                exception.GetType().ToString(),
+                exception.Message
+            );
+        }
+        else
+        {
+            logger.LogError(
+                exception,
+                "\tTime: {ExceptionTime}\n\tTraceID: {TraceID}\n\tExceptionType: {ExceptionType}\n\tMessage: {Message}\n",
+                DateTime.Now,
+                traceId,
+                exception.GetType().ToString(),
+                exception.Message
+            );
+        }
     }
 }
