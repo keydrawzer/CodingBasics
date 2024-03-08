@@ -1,11 +1,20 @@
-﻿using CodingBasics.Features.Sales.Domain.Entities;
+﻿using System;
+using System.Collections.Generic;
+using CodingBasics.Features.Sales.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace CodingBasics;
+namespace CodingBasics.DataLayer;
 
-public partial class CodingBasicsDbContext : DbContext
+public partial class AdventureWorks2022Context : DbContext
 {
-    public CodingBasicsDbContext(DbContextOptions<CodingBasicsDbContext> options) : base(options) { }
+    public AdventureWorks2022Context()
+    {
+    }
+
+    public AdventureWorks2022Context(DbContextOptions<AdventureWorks2022Context> options)
+        : base(options)
+    {
+    }
 
     public virtual DbSet<SalesOrderHeader> SalesOrderHeaders { get; set; }
 
@@ -23,10 +32,10 @@ public partial class CodingBasicsDbContext : DbContext
             entity.HasKey(e => e.SalesOrderId).HasName("PK_SalesOrderHeader_SalesOrderID");
 
             entity.ToTable("SalesOrderHeader", "Sales", tb =>
-            {
-                tb.HasComment("General sales order information.");
-                tb.HasTrigger("uSalesOrderHeader");
-            });
+                {
+                    tb.HasComment("General sales order information.");
+                    tb.HasTrigger("uSalesOrderHeader");
+                });
 
             entity.HasIndex(e => e.SalesOrderNumber, "AK_SalesOrderHeader_SalesOrderNumber").IsUnique();
 

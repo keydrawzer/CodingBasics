@@ -7,6 +7,7 @@ namespace CodingBasics.Features.Sales.Application.Services
     public interface ISalesOrderHeaderService
     {
         Task<List<SalesOrderHeader>?> GetAll();
+        Task<List<SalesOrderHeader>?> GetSalesByPersonAndYear(string name, int year);
     }
 
     public class SalesOrderHeaderService : ISalesOrderHeaderService
@@ -21,6 +22,11 @@ namespace CodingBasics.Features.Sales.Application.Services
         public async Task<List<SalesOrderHeader>?> GetAll()
         {
             return await _repository.GetAllSalesOrderHeaders();
+        }
+
+        public async Task<List<SalesOrderHeader>?> GetSalesByPersonAndYear(string name, int year)
+        {
+            return await _repository.FilterSalesByPersonAndYear(name, year);
         }
     }
 }
