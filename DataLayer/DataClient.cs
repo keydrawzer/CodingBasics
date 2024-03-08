@@ -1,25 +1,25 @@
-using System.Collections;
-using System.Data;
-using System.Reflection;
 using Microsoft.Data.SqlClient;
 
 
-public class DataClient 
+public class DataClient
 {
     private SqlConnection connection;
 
-    public DataClient(IConfiguration configuration){
+    public DataClient(IConfiguration configuration)
+    {
         connection = new SqlConnection(configuration.GetConnectionString("localServer"));
     }
-    public bool TestConnection(){
 
+    public bool TestConnection()
+    {
         try
         {
             connection.Open();
-            SqlCommand command = new SqlCommand("SELECT 1 FROM Person.Person",connection);
-            var result = command.ExecuteNonQuery();            
+            SqlCommand command = new SqlCommand("SELECT 1 FROM Person.Person", connection);
+            var result = command.ExecuteNonQuery();
             connection.Close();
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             Console.WriteLine($"Error:{ex.Message}");
             return false;
@@ -27,26 +27,37 @@ public class DataClient
         return true;
     }
 
-    public List<T>? GetResultsFromQuery<T>(string query, Func<IDataRecord,T> parseMethod){
+    public async Task<List<T>> GetResultsFromQuery<T>(string query, SqlParameter[]? sqlParameters = null) where T : new()
+    {
         try
         {
             connection.Open();
-            SqlCommand command = new SqlCommand(query,connection);
-            using SqlDataReader reader = command.ExecuteReader();           
-            List<T> results  = new List<T>();
+            SqlCommand command = new SqlCommand(query, connection);
+
+            if (sqlParameters != null && sqlParameters.Length > 0)
+            {
+                command.Parameters.AddRange(sqlParameters);
+            }
+
+            using SqlDataReader reader = await command.ExecuteReaderAsync();
+
+            List<T> results = new List<T>();
 
             while (reader.Read())
             {
-               // Map data to instances of T (you need to implement this)
-                var item = parseMethod(reader);
+                var item = Mapper.Map<T>(reader);
                 results.Add(item);
             }
-            connection.Close();
             return results;
-        }catch(Exception ex)
+        }
+        catch (Exception ex)
         {
             Console.WriteLine($"Error:{ex.Message}");
-            return null;
+            throw;
+        }
+        finally
+        {
+            connection.Close();
         }
     }
 }

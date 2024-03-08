@@ -1,33 +1,31 @@
 <template>
-    <div class="products-page">
+    <div class="sales-persons-page">
         <loader-comp :loading="state.loading" />
-        <h1>List of Products</h1>
-        <search-box :dropdownOptions="['Bikes', 'Components', 'Clothing', 'Accessories']"
-            dropdownLabel="Search by Product Category:" @searchByName="searchByNameAndType"
-            @searchBySelection="searchByNameAndType" />
-        <product-table :products="state.products" />
+        <h1>List of Sales Persons</h1>
+        <search-box :dropdownOptions="[2011, 2012, 2013, 2014]" dropdownLabel="Search by Year:"
+            @searchByName="searchByNameAndYear" @searchBySelection="searchByNameAndYear" />
+        <sales-person-table :persons="state.salesPersons" />
     </div>
 </template>
 
 <script setup>
 import { onMounted, reactive } from "vue";
-import ProductTable from "@/components/ProductTable.vue";
+import SalesPersonTable from "@/components/SalesPersonTable.vue";
 import SearchBox from "@/components/SearchBox.vue";
 import axios from "/src/utils/axios.js";
 import LoaderComp from "@/components/LoaderComp.vue";
 
 const state = reactive({
     loading: false,
-    products: [],
-    language: window.navigator.language
+    salesPersons: [],
 });
 
 async function fetchData() {
     try {
         state.loading = true;
-        const response = await axios.get(`/product/GetByCulture?cultureID=${state.language}`);
-        state.products = response.data;
-        state.products.sort((a, b) => a.productID - b.productID);
+        const response = await axios.get('/sales-person');
+        state.salesPersons = response.data;
+        state.salesPersons.sort((a, b) => a.businessEntityID - b.businessEntityID);
     } catch (error) {
         console.error(error);
     } finally {
@@ -35,13 +33,13 @@ async function fetchData() {
     }
 }
 
-async function searchByNameAndType(name, categoryType) {
+async function searchByNameAndYear(name, year) {
     try {
         state.loading = true;
         const response = await axios.get(
-            `/product/GetByNameCultureAndCategoryType?name=${name}&cultureID=${state.language}&categoryType=${categoryType}`
+            `/sales-person/GetByNameAndYear?name=${name}&year=${year}`
         );
-        state.products = response.data;
+        state.salesPersons = response.data;
     } catch (error) {
         console.error(error);
     } finally {
@@ -55,7 +53,7 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.products-page {
+.sales-persons-page {
     width: 75%;
     margin-top: 80px;
     margin-bottom: 50px;
