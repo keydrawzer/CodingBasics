@@ -39,7 +39,7 @@
 		try {
 			state.loading = true;
 			const response = await axios.get(
-				`/person/GetByNameAndType?name=${name}&emplType=${type}`
+				`/person/filter?name=${name}&type=${type}`
 			);
 			state.persons = response.data;
 		} catch (error) {
