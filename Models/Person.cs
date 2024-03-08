@@ -49,12 +49,12 @@ public partial class Person
     public string? Suffix { get; set; }
 
     /// <summary>
-    /// 0 = Contact does not wish to receive e-mail promotions, 1 = Contact does wish to receive e-mail promotions from AdventureWorks, 2 = Contact does wish to receive e-mail promotions from AdventureWorks and selected partners. 
+    /// 0 = Contact does not wish to receive e-mail promotions, 1 = Contact does wish to receive e-mail promotions from AdventureWorks, 2 = Contact does wish to receive e-mail promotions from AdventureWorks and selected partners.
     /// </summary>
     public int EmailPromotion { get; set; }
 
     /// <summary>
-    /// Additional contact information about the person stored in xml format. 
+    /// Additional contact information about the person stored in xml format.
     /// </summary>
     public string? AdditionalContactInfo { get; set; }
 
