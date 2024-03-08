@@ -7,6 +7,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services
+        .AddEndpointsApiExplorer()
+        .AddSwaggerGen()
         .AddSingleton<DataClient>()
         .AddSingleton<PersonService>()
         .AddSingleton<ProductService>()
@@ -25,6 +27,9 @@ public class Program
 
 
         var app = builder.Build();
+
+        app.UseSwagger();
+        app.UseSwaggerUI();
 
         app.UseStatusCodePages();
         app.UseExceptionHandler();
