@@ -1,6 +1,3 @@
-
-using System.Data;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 
 public class PersonService

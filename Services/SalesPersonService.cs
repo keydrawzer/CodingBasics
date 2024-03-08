@@ -1,8 +1,5 @@
 using Microsoft.Data.SqlClient;
 
-using System.Data;
-using Microsoft.AspNetCore.Mvc;
-
 public class SalesPersonService
 {
     private DataClient _connection;
