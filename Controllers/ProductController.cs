@@ -1,3 +1,5 @@
+using CodingBasics.Models;
+using CodingBasics.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,38 +18,34 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAll()
+    public IActionResult GetAllProducts()
     {
-        var products = _productService.GetAll();
-        if (products == null || products.Count == 0)
-        {
-            return NotFound("No products found.");
-        }
+        var products = _productService.GetAllProducts().ToList();
         return Ok(products);
     }
 
     [HttpGet("name/{name}")]
     public IActionResult GetProductsByName(string name)
     {
-        var products = _productService.GetProductsByName(name);
-        if (products == null || products.Count == 0)
-        {
-            return NotFound($"No products found with the name '{name}'.");
-        }
+        var products = _productService.GetProductByName(name);
         return Ok(products);
     }
 
-    [HttpGet("category/{categoryType}")]
-    public IActionResult GetProductByCategoryType(string categoryType)
+
+    [HttpGet("subcategory/{subcategoryName}")]
+    public ActionResult<List<Product>> GetProductsBySubcategoryName(string subcategoryName)
     {
-        var products = _productService.GetProductByCategoryType(categoryType);
+        var products = _productService.GetProductsBySubcategoryName(subcategoryName);
         if (products == null || products.Count == 0)
         {
-            return NotFound($"No products found in the category '{categoryType}'.");
+            return NotFound();
         }
         return Ok(products);
     }
 
+
+
+    /*
     [HttpGet("name-and-category")]
     public IActionResult GetProductByNameAndCategoryType([FromQuery] string name, [FromQuery] string categoryType)
     {
@@ -58,4 +56,5 @@ public class ProductController : ControllerBase
         }
         return Ok(products);
     }
+    */
 }

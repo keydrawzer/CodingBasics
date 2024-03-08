@@ -23,14 +23,14 @@ public class PersonController : ControllerBase
         return Ok(persons);
     }
 
-    [HttpGet("{name}")]
+    [HttpGet("name/{name}")]
     public IActionResult GetPersonsByName(string name)
     {
         var persons = _personService.GetPersonsByName(name);
         return Ok(persons);
     }
 
-    [HttpGet("{type}")]
+    [HttpGet("type/{type}")]
     public IActionResult GetPersonsType(string type)
     {
         var persons = _personService.GetPersonsByType(type);
