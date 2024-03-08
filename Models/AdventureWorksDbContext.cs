@@ -19,6 +19,10 @@ public partial class AdventureWorksDbContext : DbContext
 
     public virtual DbSet<VProductAndDescription> VProductAndDescriptions { get; set; }
 
+    public virtual DbSet<TotalSales> TotalSales { get; set; }
+
+    public virtual DbSet<SalesByYear> SalesByYears { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=LAPTOP-I3D0B80O\\SQLEXPRESS;Database=AdventureWorks2022;Trusted_Connection=True;Encrypt=False;TrustServerCertificate=False");
 
@@ -67,8 +71,23 @@ public partial class AdventureWorksDbContext : DbContext
             entity.Property(e => e.ProductModel).HasMaxLength(50);
         });
 
+        modelBuilder.Entity<TotalSales>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.PersonName).HasMaxLength(101);
+        });
+
+        modelBuilder.Entity<SalesByYear>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.Name).HasMaxLength(101);
+        });
+
         OnModelCreatingPartial(modelBuilder);
     }
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

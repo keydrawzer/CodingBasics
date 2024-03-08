@@ -11,6 +11,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AdventureWorksDbContext>();
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<SalesService>();
+
 
 var app = builder.Build();
 
@@ -57,6 +59,21 @@ app.MapGet("/product/GetByCategoryType", (ProductService productService, [FromQu
 app.MapGet("/product/GetByNameAndCategoryType", (ProductService productService, [FromQuery] string name, [FromQuery] string categoryType) =>
 {
     var results = productService.GetProductByNameAndCategoryType(name, categoryType);
+    return Results.Json(results);
+});
+
+
+//Methods for Sales *CHALLENGE*
+
+app.MapGet("/sales", (SalesService salesService) =>
+{
+    var results = salesService.GetTotalSales();
+    return Results.Json(results);
+});
+
+app.MapGet("/sales/GetByNameAndYear", (SalesService salesService, [FromQuery] string name, [FromQuery] string year) =>
+{
+    var results = salesService.GetSalestByNameAndYear(name, year);
     return Results.Json(results);
 });
 
