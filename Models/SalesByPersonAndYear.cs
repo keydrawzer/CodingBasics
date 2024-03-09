@@ -2,7 +2,7 @@ namespace CodingBasics.Models;
 
 public partial class SalesByPersonAndYear
 {
-  public int SalesPersonId { get; set; }
+  public int SalesOrderId { get; set; }
 
   public string? FullName { get; set; }
 
@@ -10,7 +10,7 @@ public partial class SalesByPersonAndYear
 
   public string? SalesTerritory { get; set; }
 
-  public decimal? TotalSales { get; set; }
+  public decimal? SubTotal { get; set; }
 
-  public int? Year { get; set; }
+  public string? Date { get; set; }
 }
