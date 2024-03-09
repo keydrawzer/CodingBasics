@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using CodingBasics.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodingBasics.Controllers
 {
@@ -17,30 +16,45 @@ namespace CodingBasics.Controllers
 
     [HttpGet]
     [Route("")]
-    public ActionResult<IEnumerable<VProductAndDescription>> GetAll()
+    public ActionResult<IEnumerable<ProductData>> GetAll()
     {
-      return _context.VProductAndDescriptions.ToList();
+      return GetProductQueryData();
 
     }
 
     [HttpGet]
-    [Route("name/{productName}")]
-    public ActionResult<IEnumerable<VProductAndDescription>> GetByName(string productName)
+    [Route("name/{name}")]
+    public ActionResult<IEnumerable<ProductData>> GetByName(string name)
     {
 
-      var products = _context.VProductAndDescriptions.Where(product => EF.Functions.Like(product.Name, $"%{productName}%")).ToList();
-
-      if (products == null || products.Count == 0)
-      {
-        return NotFound();
-      }
+      var products = GetProductQueryData().Where(product => product.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
       return products;
     }
 
     [HttpGet]
-    [Route("category/{categoryType}")]
-    public ActionResult<IEnumerable<VProductAndDescription>> GetByCategoryType(string categoryType)
+    [Route("category/{category}")]
+    public ActionResult<IEnumerable<ProductData>> GetByCategory(string category)
+    {
+      var products = GetProductQueryData()
+    .Where(product => product.Category.Contains(category, StringComparison.CurrentCultureIgnoreCase))
+    .ToList();
+
+      return products;
+    }
+
+    [HttpGet]
+    [Route("name/{name}/category/{category}")]
+    public ActionResult<IEnumerable<ProductData>> GetByNameAndCategory(string name, string category)
+    {
+      var products = GetProductQueryData()
+    .Where(product => product.Name.Contains(name, StringComparison.CurrentCultureIgnoreCase) && product.Category.Contains(category, StringComparison.CurrentCultureIgnoreCase))
+    .ToList();
+
+      return products;
+    }
+
+    private List<ProductData> GetProductQueryData()
     {
       var products = _context.Products
     .Join(
@@ -67,24 +81,15 @@ namespace CodingBasics.Controllers
         _context.ProductDescriptions,
         joined => joined.Culture.ProductDescriptionId,
         description => description.ProductDescriptionId,
-        (joined, description) => new
+        (joined, description) => new ProductData
         {
-          joined.Product.ProductId,
-          joined.Product.Name,
-          joined.Category,
+          ProductId = joined.Product.ProductId,
+          Name = joined.Product.Name,
+          Category = joined.Category.Name,
           ProductModel = joined.Model.Name,
-          joined.Culture.CultureId,
+          CultureId = joined.Culture.CultureId,
           Description = description.Description
         })
-    .Where(result => result.Category.Name.Contains(categoryType))
-    .Select(p => new VProductAndDescription
-    {
-      ProductId = p.ProductId,
-      Name = p.Name,
-      ProductModel = p.ProductModel,
-      CultureId = p.CultureId,
-      Description = p.Description
-    })
     .ToList();
 
       return products;
