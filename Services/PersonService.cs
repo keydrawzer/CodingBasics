@@ -44,8 +44,10 @@ namespace CodingBasics.Services
         {
             try
             {
+                var query = $"SELECT * FROM HumanResources.vEmployee WHERE BusinessEntityID IN (SELECT BusinessEntityID FROM Person.Person WHERE PersonType = '{personType}')";
+
                 var results = _dbContext.VEmployees
-                    .FromSqlRaw($"SELECT * FROM HumanResources.vEmployee WHERE BusinessEntityID IN (SELECT BusinessEntityID FROM Person.Person WHERE PersonType = '{personType}')")
+                    .FromSqlRaw(query)
                     .ToList();
 
                 return results;

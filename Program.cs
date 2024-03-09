@@ -7,13 +7,13 @@ using CodingBasics.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Implement the dependency injection
+//Dependency injection
 builder.Services.AddDbContext<AdventureWorksDbContext>();
 builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<SalesService>();
 
-// Configure CORS
+//CORS configuration to allow requests from the frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost", builder =>
@@ -31,6 +31,8 @@ app.UseCors("AllowLocalhost");
 
 app.MapGet("/", () => "Hello World!");
 
+
+//Methods for Persons
 app.MapGet("/person", (PersonService personService) =>
 {
     var employees = personService.GetAllPersons();
@@ -84,18 +86,19 @@ app.MapGet("/product/GetByNameAndCategoryType", (ProductService productService, 
 
 //Methods for Sales *CHALLENGE*
 
+//Total Sales by SalesPerson
 app.MapGet("/sales", (SalesService salesService) =>
 {
     var results = salesService.GetTotalSales();
     return Results.Json(results);
 });
 
+//Sales by SalesPerson and Year
 app.MapGet("/sales/GetByNameAndYear", (SalesService salesService, [FromQuery] string name, [FromQuery] string year) =>
 {
     var results = salesService.GetSalestByNameAndYear(name, year);
     return Results.Json(results);
 });
-
 
 app.Run();
 
