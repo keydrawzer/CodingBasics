@@ -1,31 +1,32 @@
 <template>
-	<div class="products-page">
+	<div class="sales-page">
 		<loader-comp :loading="state.loading" />
-		<h1>List of Products</h1>
-		<product-search-box
-			@searchByName="searchByName"
+		<h1>Sales</h1>
+		<sales-search-box
+			@searchByName="searchByNameAndYear"
+			@searchByYear="searchByNameAndYear"
 		/>
-		<product-table :products="state.products" />
+		<sales-table :sales="state.sales" />
 	</div>
 </template>
 
 <script setup>
 	import { onMounted, reactive } from "vue";
-	import ProductTable from "@/components/ProductTable.vue";
-	import ProductSearchBox from "@/components/ProductSearchBox.vue";
+	import SalesTable from "@/components/SalesTable.vue";
+	import SalesSearchBox from "@/components/SalesSearchBox.vue";
 	import axios from "/src/utils/axios.js";
 	import LoaderComp from "@/components/LoaderComp.vue";
 
 	const state = reactive({
 		loading: false,
-		products: [],
+		sales: [],
 	});
 
 	async function fetchData() {
 		try {
 			state.loading = true;
-			const response = await axios.get("/products");
-			state.products = response.data;
+			const response = await axios.get("/sales/GetOverviewByPersons");
+			state.sales = response.data;
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -33,13 +34,19 @@
 		}
 	}
 
-	async function searchByName(name) {
+	async function searchByNameAndYear(name, year) {
 		try {
 			state.loading = true;
+			var endpoint = "";
+			if (year !== null && year !== undefined && year !== '') {
+				endpoint = `/sales/GetSalesByPersonAndYear?person=${name}&year=${year}`;
+			} else {
+				endpoint = `/sales/GetSalesByPersonAndYear?person=${name}`;
+			}
 			const response = await axios.get(
-				`/products/GetByName?name=${name}`
+				endpoint
 			);
-			state.products = response.data;
+			state.sales = response.data;
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -52,7 +59,7 @@
 	});
 </script>
 <style scoped>
-	.products-page {
+	.sales-page {
 		width: 75%;
 		margin-top: 80px;
 		margin-bottom: 50px;

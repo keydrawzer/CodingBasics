@@ -1,3 +1,4 @@
+using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
 public class Program
@@ -6,9 +7,7 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services
-        .AddSingleton<DataClient>()
-        .AddSingleton<PersonService>()
+        builder.Services.AddInfrastructure()
         .AddCors(options =>
         {
             options.AddPolicy("AllowAll",
@@ -30,6 +29,13 @@ public class Program
         app.MapGet("/person/GetByNameAndType", (PersonService personService, [FromQuery] string name, string emplType) => Results.Ok(personService.GetPersonByNameAndPersonType(name, emplType)));
         //Person methods
         //Products methods
+        app.MapGet("/products", (ProductsService productsService) => Results.Ok(productsService.GetAll()));
+        app.MapGet("/products/GetByCategoryType", (ProductsService productsService, [FromQuery] string categoryType) => Results.Ok(productsService.GetProductByCategoryType(categoryType)));
+        app.MapGet("/products/GetByName", (ProductsService productsService, [FromQuery] string name) => Results.Ok(productsService.GetProductByName(name)));
+        app.MapGet("/sales/GetOverviewByPersons", (SalesService salesService) => Results.Ok(salesService.GetOverviewByPersons()));
+        app.MapGet("/sales/GetSalesByPersonAndYear", (SalesService salesService, [FromQuery] string person, int? year) => Results.Ok(salesService.GetSalesByPersonAndYear(
+            person, year
+        )));
         app.Run();
     }
 }
