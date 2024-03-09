@@ -265,3 +265,4 @@ C:\Users\drher\Desktop\RSM-US\Oficial\CodingBasics\obj\Debug\net8.0\refint\Codin
 C:\Users\drher\Desktop\RSM-US\Oficial\CodingBasics\obj\Debug\net8.0\CodingBasics.pdb
 C:\Users\drher\Desktop\RSM-US\Oficial\CodingBasics\obj\Debug\net8.0\CodingBasics.genruntimeconfig.cache
 C:\Users\drher\Desktop\RSM-US\Oficial\CodingBasics\obj\Debug\net8.0\ref\CodingBasics.dll
+C:\Users\drher\Desktop\RSM-US\Oficial\CodingBasics\bin\Debug\net8.0\my-client-app\package-lock.json

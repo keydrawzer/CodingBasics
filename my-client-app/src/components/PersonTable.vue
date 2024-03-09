@@ -11,7 +11,7 @@
 		</thead>
 		<tbody>
 			<tr v-for="person in paginatedPersons" :key="person.id">
-				<td>{{ person.businessEntityID }}</td>
+				<td>{{ person.businessEntityId }}</td>
 				<td>{{ person.firstName }} {{ person.lastName }}</td>
 				<td>{{ person.jobTitle }}</td>
 				<td>{{ person.phoneNumber }}</td>

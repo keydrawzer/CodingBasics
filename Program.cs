@@ -13,8 +13,21 @@ builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<SalesService>();
 
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost", builder =>
+    {
+        builder.WithOrigins("http://localhost:8080") // Agrega el origen de tu aplicación Vue.js
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
+});
+
 
 var app = builder.Build();
+
+app.UseCors("AllowLocalhost");
 
 app.MapGet("/", () => "Hello World!");
 
