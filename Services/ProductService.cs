@@ -10,7 +10,7 @@ public class ProductService
     }
     public List<ProductsModel>? GetAll(){
         try{
-            var result = _connection.GetResultsFromQuery<ProductsModel>("SELECT * FROM [Production].[vProductAndDescription]", Map);           
+           var result = _connection.GetResultsFromQuery<ProductsModel>("SELECT * FROM [Production].[vProductAndDescription]", Map);           
             return result;
         }catch (Exception ex){
             Console.WriteLine($"JustError: {ex.Message}");

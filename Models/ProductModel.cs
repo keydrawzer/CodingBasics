@@ -6,3 +6,5 @@ public class ProductsModel {
     public string? CultureID {get;set;}
     public string? Description {get;set;}
 }
+
+
