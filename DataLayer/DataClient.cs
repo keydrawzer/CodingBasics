@@ -3,23 +3,25 @@ using System.Data;
 using System.Reflection;
 using Microsoft.Data.SqlClient;
 
-
 public class DataClient 
 {
     private SqlConnection connection;
 
-    public DataClient(IConfiguration configuration){
+    public DataClient(IConfiguration configuration)
+    {
         connection = new SqlConnection(configuration.GetConnectionString("localServer"));
     }
-    public bool TestConnection(){
-
+    public bool TestConnection()
+    {
+        var test = connection;
         try
         {
             connection.Open();
             SqlCommand command = new SqlCommand("SELECT 1 FROM Person.Person",connection);
             var result = command.ExecuteNonQuery();            
             connection.Close();
-        }catch(Exception ex)
+        }
+        catch(Exception ex)
         {
             Console.WriteLine($"Error:{ex.Message}");
             return false;
@@ -27,7 +29,8 @@ public class DataClient
         return true;
     }
 
-    public List<T>? GetResultsFromQuery<T>(string query, Func<IDataRecord,T> parseMethod){
+    public List<T>? GetResultsFromQuery<T>(string query, Func<IDataRecord,T> parseMethod)
+    {
         try
         {
             connection.Open();
@@ -43,7 +46,8 @@ public class DataClient
             }
             connection.Close();
             return results;
-        }catch(Exception ex)
+        }
+        catch(Exception ex)
         {
             Console.WriteLine($"Error:{ex.Message}");
             return null;
