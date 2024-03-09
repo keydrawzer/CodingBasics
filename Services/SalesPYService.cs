@@ -10,7 +10,6 @@ public class SalesPYService
         _connection = connection;
     }
 
-    // Método para obtener las ventas de un vendedor específico en un año dado
     public List<SalesPYModel> GetSalesByPersonAndYear(string salesPersonName, int year)
     {
         try
@@ -28,13 +27,13 @@ public class SalesPYService
                            $"WHERE p.FirstName LIKE '%{salesPersonName}%' " +
                            $"AND YEAR(soh.OrderDate) = '{year}' " +
                            "GROUP BY sp.BusinessEntityID, p.FirstName, YEAR(soh.OrderDate);", Map);
-            return result;
+             return result ?? new List<SalesPYModel>();
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
-            return null;
         }
+        return new List<SalesPYModel>();
     }
 
     public SalesPYModel Map(IDataRecord record)
