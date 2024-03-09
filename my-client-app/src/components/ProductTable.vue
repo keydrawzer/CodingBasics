@@ -1,21 +1,21 @@
 <template>
-  <table v-if="state.persons && state.persons.length > 0" class="box-shadow">
+  <table v-if="state.products && state.products.length > 0" class="box-shadow">
     <thead>
       <tr>
         <th>Id</th>
         <th>Name</th>
-        <th>Job Title</th>
-        <th>Phone Number</th>
-        <th>Email</th>
+        <th>Product Model</th>
+        <th>Culture</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="person in paginatedPersons" :key="person.id">
-        <td>{{ person.businessEntityID }}</td>
-        <td>{{ person.firstName }} {{ person.lastName }}</td>
-        <td>{{ person.jobTitle }}</td>
-        <td>{{ person.phoneNumber }}</td>
-        <td>{{ person.emailAddress }}</td>
+      <tr v-for="product in paginatedProducts" :key="product.id">
+        <td>{{ product.productID }}</td>
+        <td>{{ product.name }} {{ product.lastName }}</td>
+        <td>{{ product.productModel }}</td>
+        <td>{{ product.cultureID }}</td>
+        <td>{{ product.description }}</td>
       </tr>
     </tbody>
     <tfoot>
@@ -55,9 +55,9 @@
       <tr>
         <th>Id</th>
         <th>Name</th>
-        <th>Job Title</th>
-        <th>Phone Number</th>
-        <th>Email</th>
+        <th>Product Model</th>
+        <th>Culture</th>
+        <th>Description</th>
       </tr>
     </thead>
     <tbody>
@@ -77,23 +77,23 @@ onBeforeUpdate(() => {
 });
 
 const props = defineProps({
-  persons: Array,
+  products: Array,
 });
 
 const state = reactive({
-  persons: computed(() => props.persons),
+  products: computed(() => props.products),
   pageSize: 20,
   currentPage: 1,
 });
 
-const paginatedPersons = computed(() => {
+const paginatedProducts = computed(() => {
   const startIndex = (state.currentPage - 1) * state.pageSize;
   const endIndex = startIndex + state.pageSize;
-  return state.persons.slice(startIndex, endIndex);
+  return state.products.slice(startIndex, endIndex);
 });
 
 const totalPages = computed(() =>
-  Math.ceil(state.persons.length / state.pageSize)
+  Math.ceil(state.products.length / state.pageSize)
 );
 
 const visiblePages = computed(() => {
@@ -127,6 +127,10 @@ td {
   border-bottom: 1px solid #ddd;
   padding: 8px;
   text-align: left;
+}
+
+td:last-child {
+  width: 50%;
 }
 
 th {

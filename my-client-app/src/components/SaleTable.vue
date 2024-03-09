@@ -1,26 +1,30 @@
 <template>
-  <table v-if="state.persons && state.persons.length > 0" class="box-shadow">
+  <table v-if="state.sales && state.sales.length > 0" class="box-shadow">
     <thead>
       <tr>
         <th>Id</th>
         <th>Name</th>
         <th>Job Title</th>
-        <th>Phone Number</th>
-        <th>Email</th>
+        <th>Territory</th>
+        <th>Territory Group</th>
+        <th>Subtotal</th>
+        <th>Fiscal Year</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="person in paginatedPersons" :key="person.id">
-        <td>{{ person.businessEntityID }}</td>
-        <td>{{ person.firstName }} {{ person.lastName }}</td>
-        <td>{{ person.jobTitle }}</td>
-        <td>{{ person.phoneNumber }}</td>
-        <td>{{ person.emailAddress }}</td>
+      <tr v-for="sales in paginatedSales" :key="sales.id">
+        <td>{{ sales.salesPersonID }}</td>
+        <td>{{ sales.fullName }}</td>
+        <td>{{ sales.jobTitle }}</td>
+        <td>{{ sales.salesTerritory }}</td>
+        <td>{{ sales.group }}</td>
+        <td>{{ sales.subTotal }}</td>
+        <td>{{ sales.fiscalYear }}</td>
       </tr>
     </tbody>
     <tfoot>
       <tr>
-        <td colspan="5">
+        <td colspan="7">
           <div class="pagination">
             <button
               @click="goToPage(state.currentPage - 1)"
@@ -56,13 +60,15 @@
         <th>Id</th>
         <th>Name</th>
         <th>Job Title</th>
-        <th>Phone Number</th>
-        <th>Email</th>
+        <th>Territory</th>
+        <th>Territory Group</th>
+        <th>Subtotal</th>
+        <th>Fiscal Year</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td colspan="5">No results found.</td>
+        <td colspan="7">No results found.</td>
       </tr>
     </tbody>
   </table>
@@ -77,23 +83,23 @@ onBeforeUpdate(() => {
 });
 
 const props = defineProps({
-  persons: Array,
+  sales: Array,
 });
 
 const state = reactive({
-  persons: computed(() => props.persons),
+  sales: computed(() => props.sales),
   pageSize: 20,
   currentPage: 1,
 });
 
-const paginatedPersons = computed(() => {
+const paginatedSales = computed(() => {
   const startIndex = (state.currentPage - 1) * state.pageSize;
   const endIndex = startIndex + state.pageSize;
-  return state.persons.slice(startIndex, endIndex);
+  return state.sales.slice(startIndex, endIndex);
 });
 
 const totalPages = computed(() =>
-  Math.ceil(state.persons.length / state.pageSize)
+  Math.ceil(state.sales.length / state.pageSize)
 );
 
 const visiblePages = computed(() => {
@@ -127,6 +133,10 @@ td {
   border-bottom: 1px solid #ddd;
   padding: 8px;
   text-align: left;
+}
+
+th {
+  width: 14.28%;
 }
 
 th {

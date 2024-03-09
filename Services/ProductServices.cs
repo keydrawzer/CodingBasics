@@ -10,7 +10,7 @@ public class ProductService
     }
     public List<ProductsModel>? GetAll(){
         try{
-            var result = _connection.GetResultsFromQuery<ProductsModel>("SELECT * FROM [Production].[vProductAndDescription]", Map);           
+            var result = _connection.GetResultsFromQuery<ProductsModel>("SELECT * FROM [Production].[vProductAndDescription] WHERE CultureID='en'", Map);           
             return result;
         }catch (Exception ex){
             Console.WriteLine($"JustError: {ex.Message}");
@@ -23,7 +23,7 @@ public class ProductService
             var result = _connection.GetResultsFromQuery<ProductsModel>(
                 "SELECT * " +
                 "FROM [AdventureWorks2022].[Production].[vProductAndDescription] " +
-                $"WHERE Name LIKE '%{name}%'", Map);
+                $"WHERE Name LIKE '%{name}%' AND CultureID ='en'", Map);
             return result;
         }catch (Exception ex){
             Console.WriteLine($"JustError: {ex.Message}");

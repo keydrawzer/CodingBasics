@@ -1,33 +1,33 @@
 <template>
-  <div class="persons-page">
+  <div class="sale-page">
     <loader-comp :loading="state.loading" />
-    <h1>List of Persons</h1>
+    <h1>Sales Overview</h1>
     <search-box
-      @searchByName="searchByNameAndType"
-      @searchByType="searchByNameAndType"
+      @searchByName="searchByNameAndYear"
+      @searchByYear="searchByNameAndYear"
     />
-    <person-table :persons="state.persons" />
+    <sale-table :sales="state.sales" />
   </div>
 </template>
 
 <script setup>
 import { onMounted, reactive } from "vue";
-import PersonTable from "@/components/PersonTable.vue";
-import SearchBox from "@/components/SearchBox.vue";
+import SaleTable from "@/components/SaleTable.vue";
+import SearchBox from "@/components/SearchBoxSales.vue";
 import axios from "/src/utils/axios.js";
 import LoaderComp from "@/components/LoaderComp.vue";
 
 const state = reactive({
   loading: false,
-  persons: [],
+  sales: [],
 });
 
 async function fetchData() {
   try {
     state.loading = true;
-    const response = await axios.get("/person");
-    state.persons = response.data;
-    state.persons.sort((a, b) => a.businessEntityID - b.businessEntityID);
+    const response = await axios.get("/sales");
+    state.sales = response.data;
+    state.sales.sort((a, b) => a.salesPersonID - b.salesPersonID);
   } catch (error) {
     console.error(error);
   } finally {
@@ -35,13 +35,13 @@ async function fetchData() {
   }
 }
 
-async function searchByNameAndType(name, type) {
+async function searchByNameAndYear(name, year) {
   try {
     state.loading = true;
     const response = await axios.get(
-      `/person/GetByNameAndType?name=${name}&emplType=${type}`
+      `/sales/GetByNameAndYear?name=${name}&year=${year}`
     );
-    state.persons = response.data;
+    state.sales = response.data;
   } catch (error) {
     console.error(error);
   } finally {
@@ -54,7 +54,7 @@ onMounted(async () => {
 });
 </script>
 <style scoped>
-.persons-page {
+.sale-page {
   width: 75%;
   margin-top: 80px;
   margin-bottom: 50px;
