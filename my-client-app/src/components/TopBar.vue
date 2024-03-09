@@ -18,41 +18,49 @@
 				<span>Products</span>
 			</div>
 		</router-link>
+		<router-link to="/sales" class="nav-link">
+			<div class="icon-container">
+				<i class="material-icons">
+					query_stats
+				</i>
+				<span>Sales</span>
+			</div>
+		</router-link>
 	</div>
 </template>
 
 <script setup></script>
 
 <style scoped>
-	.top-bar {
-		background-color: #181723;
-		color: #fff;
-		padding: 10px;
-		position: fixed;
-		width: 100%;
-		top: 0;
-		display: flex;
-		justify-content: flex-start;
-		align-items: center;
-	}
+.top-bar {
+	background-color: #181723;
+	color: #fff;
+	padding: 10px;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+}
 
-	.nav-link {
-		text-decoration: solid;
-		font-weight: 500;
-		color: #fff;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		margin-left: 25px;
-	}
+.nav-link {
+	text-decoration: solid;
+	font-weight: 500;
+	color: #fff;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin-left: 25px;
+}
 
-	.icon-container {
-		display: flex;
-		align-items: center;
-	}
+.icon-container {
+	display: flex;
+	align-items: center;
+}
 
-	.material-icons {
-		font-size: 24px;
-		margin-right: 8px;
-	}
+.material-icons {
+	font-size: 24px;
+	margin-right: 8px;
+}
 </style>
