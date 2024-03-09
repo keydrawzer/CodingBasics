@@ -27,7 +27,6 @@ async function fetchData() {
     state.loading = true;
     const response = await axios.get("/product");
     state.products = response.data;
-    console.log(state.products);
     state.products.sort((a, b) => a.productID - b.productID);
   } catch (error) {
     console.error(error);

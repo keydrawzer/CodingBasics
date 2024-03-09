@@ -68,7 +68,13 @@
   </table>
 </template>
 <script setup>
-import { computed, reactive, defineProps } from "vue";
+import { computed, reactive, defineProps, onBeforeUpdate } from "vue";
+
+onBeforeUpdate(() => {
+  if (state.currentPage > totalPages.value) {
+    state.currentPage = 1;
+  }
+});
 
 const props = defineProps({
   products: Array,
