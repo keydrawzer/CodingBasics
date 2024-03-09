@@ -7,10 +7,12 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services
-        .AddSingleton<DataClient>()
+        .AddSingleton<DataClient>() //Singleton es una instancia unica
         .AddSingleton<PersonService>()
-        .AddSingleton<ProductService>()
-        .AddCors(options =>
+        .AddSingleton<ProductsService>()
+        .AddSingleton<SalesOverService>()
+        .AddSingleton<SalesPYService>()
+        .AddCors(options => //AddCors aplicacion necesaria
         {
             options.AddPolicy("AllowAll",
                 builder => builder
@@ -32,11 +34,13 @@ public class Program
         app.MapGet("/person/GetByNameAndType", (PersonService personService, [FromQuery] string name, string emplType) 
         => Results.Ok(personService.GetPersonByNameAndPersonType(name, emplType)));
         //Products methods
-        app.MapGet("/product", (ProductService productService) => Results.Ok(productService.GetAll()));
-        app.MapGet("/product/GetByName", (ProductService productService, [FromQuery] string name) => Results.Ok(productService.GetProductsByName(name)));
-        app.MapGet("/product/GetByCatType", (ProductService productService, [FromQuery] string catType) => Results.Ok(productService.GetProductByCategoryType(catType)));
-        app.MapGet("/product/GetByNameAndType", (ProductService productService, [FromQuery] string name, string catType) 
-        => Results.Ok(productService.GetProductByNameAndCategoryType(name, catType)));
+        app.MapGet("/products", (ProductsService productsService) => Results.Ok(productsService.GetAll()));
+        app.MapGet("/products/GetByName", (ProductsService ProductsService, [FromQuery] string name) => Results.Ok(ProductsService.GetProductsByName(name)));
+        app.MapGet("/products/GetByCategory", (ProductsService ProductsService, [FromQuery] string categoryType) => Results.Ok(ProductsService.GetProductsByCategory(categoryType)));
+        //Sales methods
+        app.MapGet("/sales", (SalesOverService salesService) => Results.Ok(salesService.GetAll()));
+        app.MapGet("/sales/GetByPersonAndYear", (SalesPYService salespyServices, [FromQuery] string salesPersonName, int year) => Results.Ok(salespyServices.GetSalesByPersonAndYear(salesPersonName, year)));
+      
         app.Run();
     }
 }
