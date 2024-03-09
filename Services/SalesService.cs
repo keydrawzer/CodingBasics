@@ -12,24 +12,19 @@ public class SalesService
     {
         try{
             var result = _connection.GetResultsFromQuery<SalesModel>(
-                "SELECT " +
-                " pvt.[SalesPersonID], pvt.[FullName], pvt.[JobTitle], pvt.[SalesTerritory], pvt.[Group], pvt.[SalesQuota]," + 
-                $" pvt.[SalesYTD], pvt.[SalesLastYear], pvt.[2011] " +
-                "FROM (SELECT " + 
-                "soh.[SalesPersonID], p.[FirstName] + ' ' + COALESCE(p.[MiddleName], '') + ' ' + p.[LastName] AS [FullName]," +
-                " e.[JobTitle], st.[Name] AS [SalesTerritory], st.[Group], sp.[SalesQuota], sp.[SalesYTD], sp.[SalesLastYear]," +
-                " soh.[SubTotal], YEAR(DATEADD(m, 6, soh.[OrderDate])) AS [FiscalYear] " +
-                "FROM [Sales].[SalesPerson] sp " +
-                "INNER JOIN [Sales].[SalesOrderHeader] soh " + 
-                "ON sp.[BusinessEntityID] = soh.[SalesPersonID] " +
-                "INNER JOIN [Sales].[SalesTerritory] st " +
-                "ON sp.[TerritoryID] = st.[TerritoryID] " +
-                "INNER JOIN [HumanResources].[Employee] e " +
-                "ON soh.[SalesPersonID] = e.[BusinessEntityID] " +
-                "INNER JOIN [Person].[Person] p " +
-                "ON p.[BusinessEntityID] = sp.[BusinessEntityID] "+
-                ") AS soh " +
-                $"PIVOT ( SUM([SubTotal]) FOR [FiscalYear] IN ([2011]) ) AS pvt ", Map);           
+                "SELECT * " +
+                "FROM("+
+                "SELECT soh.[SalesPersonID], "+
+                "CONCAT(p.[FirstName], ' ', COALESCE(p.[MiddleName], ''), ' ', p.[LastName]) AS [FullName], "+
+                "e.[JobTitle], st.[Name] AS [SalesTerritory], st.[Group], soh.[SubTotal], "+
+                "YEAR(DATEADD(m, 6, soh.[OrderDate])) AS [FiscalYear] "+
+                "FROM [Sales].[SalesPerson] sp "+
+                "INNER JOIN [Sales].[SalesOrderHeader] soh ON sp.[BusinessEntityID] = soh.[SalesPersonID] "+
+                "INNER JOIN [Sales].[SalesTerritory] st ON sp.[TerritoryID] = st.[TerritoryID] "+
+                "INNER JOIN [HumanResources].[Employee] e ON soh.[SalesPersonID] = e.[BusinessEntityID] "+
+                "INNER JOIN [Person].[Person] p ON p.[BusinessEntityID] = sp.[BusinessEntityID]"+
+                ") AS soh "+
+                "ORDER BY soh.[FiscalYear] DESC", Map);         
             return result;
         }catch (Exception ex){
             Console.WriteLine($"JustError: {ex.Message}");
@@ -40,25 +35,19 @@ public class SalesService
     public List<SalesModel>? GetSalesByNameAndYear(string name, string year){
         try{
             var result = _connection.GetResultsFromQuery<SalesModel>(
-                "SELECT " +
-                " pvt.[SalesPersonID], pvt.[FullName], pvt.[JobTitle], pvt.[SalesTerritory], pvt.[Group], pvt.[SalesQuota]," + 
-                $" pvt.[SalesYTD], pvt.[SalesLastYear], pvt.[{year}] " +
-                "FROM (SELECT " + 
-                "soh.[SalesPersonID], p.[FirstName] + ' ' + COALESCE(p.[MiddleName], '') + ' ' + p.[LastName] AS [FullName]," +
-                " e.[JobTitle], st.[Name] AS [SalesTerritory], st.[Group], sp.[SalesQuota], sp.[SalesYTD], sp.[SalesLastYear]," +
-                " soh.[SubTotal], YEAR(DATEADD(m, 6, soh.[OrderDate])) AS [FiscalYear] " +
-                "FROM [Sales].[SalesPerson] sp " +
-                "INNER JOIN [Sales].[SalesOrderHeader] soh " + 
-                "ON sp.[BusinessEntityID] = soh.[SalesPersonID] " +
-                "INNER JOIN [Sales].[SalesTerritory] st " +
-                "ON sp.[TerritoryID] = st.[TerritoryID] " +
-                "INNER JOIN [HumanResources].[Employee] e " +
-                "ON soh.[SalesPersonID] = e.[BusinessEntityID] " +
-                "INNER JOIN [Person].[Person] p " +
-                "ON p.[BusinessEntityID] = sp.[BusinessEntityID] "+
-                ") AS soh " +
-                $"PIVOT ( SUM([SubTotal]) FOR [FiscalYear] IN ([{year}]) ) AS pvt " +
-                $"WHERE pvt.[FullName] LIKE '%{name}%' AND pvt.[{year}] IS NOT NULL;", Map);           
+                "SELECT * " +
+                "FROM( "+
+                "SELECT soh.[SalesPersonID], "+
+                "CONCAT(p.[FirstName], ' ', COALESCE(p.[MiddleName], ''), ' ', p.[LastName]) AS [FullName], "+
+                "e.[JobTitle], st.[Name] AS [SalesTerritory], st.[Group], soh.[SubTotal], "+
+                "YEAR(DATEADD(m, 6, soh.[OrderDate])) AS [FiscalYear] "+
+                "FROM [Sales].[SalesPerson] sp "+
+                "INNER JOIN [Sales].[SalesOrderHeader] soh ON sp.[BusinessEntityID] = soh.[SalesPersonID] "+
+                "INNER JOIN [Sales].[SalesTerritory] st ON sp.[TerritoryID] = st.[TerritoryID] "+
+                "INNER JOIN [HumanResources].[Employee] e ON soh.[SalesPersonID] = e.[BusinessEntityID] "+
+                "INNER JOIN [Person].[Person] p ON p.[BusinessEntityID] = sp.[BusinessEntityID] "+
+                ") AS soh "+
+                $"WHERE soh.[FullName] LIKE '%{name}%' AND soh.[FiscalYear] LIKE '%{year}%' ORDER BY soh.[FiscalYear] DESC", Map);           
             return result;
         }catch (Exception ex){
             Console.WriteLine($"JustError: {ex.Message}");
@@ -73,11 +62,8 @@ public class SalesService
             sales.JobTitle = record["JobTitle"] as string;
             sales.SalesTerritory = record["SalesTerritory"] as string;
             sales.Group = record["Group"] as string;
-            sales.SalesQuota = record["SalesQuota"] as decimal? ;
-            sales.SalesYTD = record["SalesYTD"] as decimal?;
-            sales.SalesLastYear = record["SalesLastYear"] as decimal?;
-            sales.YearSelected = record.GetName(record.FieldCount - 1);
-            sales.YearSelectedValue = record.GetValue(record.FieldCount - 1) as decimal?;
+            sales.SubTotal = record["SubTotal"] as decimal?;
+            sales.FiscalYear = (int)record["FiscalYear"];
 
         return sales;
             
