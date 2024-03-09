@@ -30,11 +30,6 @@ namespace CodingBasics.Controllers
 
             var persons = _context.VEmployees.Where(person => EF.Functions.Like(person.FirstName, name) || EF.Functions.Like(person.MiddleName, name) || EF.Functions.Like(person.LastName, name)).ToList();
 
-            if (persons == null || persons.Count == 0)
-            {
-                return NotFound();
-            }
-
             return persons;
         }
 
@@ -53,11 +48,6 @@ namespace CodingBasics.Controllers
             .Select(joined => joined.Employee)
             .ToList();
 
-            if (persons == null || persons.Count == 0)
-            {
-                return NotFound();
-            }
-
             return persons;
         }
 
@@ -75,13 +65,6 @@ namespace CodingBasics.Controllers
             .Where(joined => joined.Person.PersonType == personType && (joined.Person.FirstName == personName || joined.Person.LastName == personName || joined.Person.MiddleName == personName))
             .Select(joined => joined.Employee)
             .ToList();
-
-            if (persons == null || persons.Count == 0)
-            {
-                return NotFound();
-            }
-
-
 
             return persons;
         }
