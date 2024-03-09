@@ -49,4 +49,10 @@ public class DataClient
             return null;
         }
     }
+
+    internal object GetResultsFromQuery<T>()
+    {
+        throw new NotImplementedException();
+    }
+
 }
