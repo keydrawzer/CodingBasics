@@ -1,5 +1,5 @@
-
-public class PersonModel {
+public class PersonModel
+{
     public int BusinessEntityID {get;set;}
     public string? Title {get;set;}
     public string? FirstName {get;set;}

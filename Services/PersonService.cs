@@ -1,4 +1,3 @@
-
 using System.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +12,11 @@ public class PersonService
     {
         try
         {
-            var result = _connection.GetResultsFromQuery<PersonModel>("SELECT * FROM [HumanResources].[vEmployee]", Map);           
+            var result = _connection.GetResultsFromQuery<PersonModel>(
+                "SELECT BusinessEntityID, Title, FirstName, MiddleName, LastName, " +
+                "Suffix, JobTitle, PhoneNumber, PhoneNumberType, EmailAddress, EmailPromotion, AddressLine1, " +
+                "AddressLine2, City, StateProvinceName, PostalCode, CountryRegionName, AdditionalContactInfo " +
+                "FROM [HumanResources].[vEmployee]", Map);           
             return result;
         }
         catch (Exception ex)
@@ -21,7 +24,6 @@ public class PersonService
             Console.WriteLine($"JustError: {ex.Message}");
             return null;
         }
-        
     }
 
     public List<PersonModel>? GetPersonByName(string name)
@@ -29,13 +31,10 @@ public class PersonService
         try
         {
             var result = _connection.GetResultsFromQuery<PersonModel>(
-                "SELECT * " +
+                "SELECT FirstName,MiddleName,LastName" +
                 "FROM [AdventureWorks2022].[HumanResources].[vEmployee] " +
                 $"WHERE CONCAT(FirstName,' ',MiddleName,' ',LastName) LIKE '%{name}%'", Map);
-            //var result = _connection.GetResultsFromQuery<PersonModel>(
-            //    "SELECT * " +
-            //    "FROM [AdventureWorks2022].[HumanResources].[vEmployee] " +
-            //    $"WHERE FirstName = '%{name}%'", Map);
+
             return result;
         }
         catch (Exception ex)
@@ -62,7 +61,6 @@ public class PersonService
             Console.WriteLine($"Error message: {ex.Message}");
              return null;
         }
-       
     }
 
     public List<PersonModel>? GetPersonByNameAndPersonType(string name, string personType)
@@ -86,7 +84,6 @@ public class PersonService
             Console.WriteLine($"JustError: {ex.Message}");
             return null;
         }
-        
     }
     public PersonModel Map(IDataRecord record)
     {

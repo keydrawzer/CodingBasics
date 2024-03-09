@@ -3,7 +3,6 @@ using System.Data;
 using System.Reflection;
 using Microsoft.Data.SqlClient;
 
-
 public class DataClient 
 {
     private SqlConnection connection;
@@ -30,7 +29,8 @@ public class DataClient
         return true;
     }
 
-    public List<T>? GetResultsFromQuery<T>(string query, Func<IDataRecord,T> parseMethod){
+    public List<T>? GetResultsFromQuery<T>(string query, Func<IDataRecord,T> parseMethod)
+    {
         try
         {
             connection.Open();
