@@ -18,6 +18,12 @@
 				<span>Products</span>
 			</div>
 		</router-link>
+		<router-link to="/sales" class="nav-link">
+			<div class="icon-container">
+				<i class="material-icons">attach_money</i>
+				<span>Sales</span>
+			</div>
+		</router-link>
 	</div>
 </template>
 

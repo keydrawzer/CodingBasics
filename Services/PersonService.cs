@@ -36,7 +36,6 @@ namespace CodingBasics.Services
             }
             catch (Exception ex)
             {
-                // Log the error or handle it appropriately
                 throw new Exception($"Error: {ex.Message}");
             }
         }
@@ -53,7 +52,31 @@ namespace CodingBasics.Services
             }
             catch (Exception ex)
             {
-                // Log the error or handle it appropriately
+                throw new Exception($"Error: {ex.Message}");
+            }
+        }
+
+        public List<VEmployee> GetPersonByNameAndPersonType(string name, string personType)
+        {
+            try
+            {
+                var query = "SELECT * " +
+                    $"FROM [AdventureWorks2022].[HumanResources].[vEmployee] A " +
+                    $"INNER JOIN Person.Person B ON A.BusinessEntityID = B.BusinessEntityID " +
+                    $"WHERE " +
+                    $"    ('{name}' ='' OR '{name}' IS NULL OR CONCAT(A.FirstName, ' ', A.MiddleName, ' ', A.LastName) LIKE '%{name}%') " +
+                    $"    AND " +
+                    $"    ('{personType}' = '' OR '{personType}' IS NULL OR B.PersonType = '{personType}')";
+
+                    
+                var results = _dbContext.VEmployees
+                    .FromSqlRaw(query)
+                    .ToList();
+
+                return results;
+            }
+            catch (Exception ex)
+            {
                 throw new Exception($"Error: {ex.Message}");
             }
         }

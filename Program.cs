@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost", builder =>
     {
-        builder.WithOrigins("http://localhost:8080") // Agrega el origen de tu aplicación Vue.js
+        builder.WithOrigins("http://localhost:8080")
                .AllowAnyMethod()
                .AllowAnyHeader();
     });
@@ -46,6 +46,12 @@ app.MapGet("/person/GetByName", (PersonService personService, [FromQuery] string
 app.MapGet("/person/GetByEmpType", (PersonService personService, [FromQuery] string personType) =>
 {
     var results = personService.GetPersonsByEmpType(personType);
+    return Results.Json(results);
+});
+
+app.MapGet("/person/GetByNameAndType",(PersonService personService, [FromQuery] string name, [FromQuery] string personType) =>
+{
+    var results = personService.GetPersonByNameAndPersonType(name, personType);
     return Results.Json(results);
 });
 
