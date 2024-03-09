@@ -49,4 +49,9 @@ public class DataClient
             return null;
         }
     }
+
+    internal List<T>? GetResultsFromQuery<T>(string query, Func<IDataRecord, T> map, object parameters)
+    {
+        throw new NotImplementedException();
+    }
 }

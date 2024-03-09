@@ -1,33 +1,33 @@
 <template>
   <div class="product-page">
     <loader-comp :loading="state.loading" />
-    <h1>List of Products</h1>
-    <search-box-products
-      @searchByName="searchByNameAndCategory"
-      @searchByCategory="searchByNameAndCategory"
+    <h1>List of Sales</h1>
+    <search-box-sales
+      @searchByName="searchByNameAndYear"
+      @searchByYear="searchByNameAndYear"
     />
-    <product-table :products="state.products" />
+    <sales-table :products="state.sales" />
   </div>
 </template>
 
 <script setup>
 import { onMounted, reactive } from "vue";
-import ProductTable from "@/components/ProductTable.vue";
-import SearchBoxProducts from '@/components/SearchBoxProducts.vue'
+import SalesTable from "@/components/SalesTable.vue";
+import SearchBoxSales from '@/components/SearchBoxSales.vue'
 import axios from "/src/utils/axios.js";
 import LoaderComp from "@/components/LoaderComp.vue";
 
 const state = reactive({
   loading: false,
-  products: [],
+  sales: [],
 });
 
 async function fetchData() {
   try {
     state.loading = true;
-    const response = await axios.get("/products");
-    state.products = response.data;
-    state.products.sort((a, b) => a.productID - b.productID);
+    const response = await axios.get("/sales");
+    state.sales = response.data;
+    state.sales.sort((a, b) => a.salesPersonID - b.salesPersonID);
   } catch (error) {
     console.error(error);
   } finally {
@@ -35,13 +35,13 @@ async function fetchData() {
   }
 }
 
-async function searchByNameAndCategory(name, category) {
+async function searchByNameAndYear(name, year) {
   try {
     state.loading = true;
     const response = await axios.get(
-      `/product/GetByNameAndType/?name=${name}&catType=${category}`
+      `/sales/GetByNameAndYear?name=${name}&year=${year}`
     );
-    state.products = response.data;
+    state.sales = response.data;
   } catch (error) {
     console.error(error);
   } finally {
