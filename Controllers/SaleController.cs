@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using CodingBasics.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace CodingBasics.Controllers
 {
@@ -16,7 +15,7 @@ namespace CodingBasics.Controllers
     }
 
     [HttpGet]
-    [Route("")]
+    [Route("overview")]
     public ActionResult<IEnumerable<SalesOverview>> GetSalesOverview()
     {
       var result = _context.SalesPeople
@@ -74,18 +73,46 @@ namespace CodingBasics.Controllers
     .OrderByDescending(x => x.TotalSales)
     .ToList();
 
-      if (result == null || result.Count == 0)
-      {
-        return NotFound();
-      }
-
       return result;
 
     }
 
     [HttpGet]
-    [Route("/{personName}/{year}")]
+    [Route("{personName}/{year}")]
     public ActionResult<IEnumerable<SalesByPersonAndYear>> GetByPersonNameAndYear(string personName, int year)
+    {
+      var result = GetSaleQueryData().Where(data => data.FullName.Contains(personName, StringComparison.CurrentCultureIgnoreCase) && DateOnly.Parse(data.Date).Year == year).ToList();
+
+      return result;
+    }
+
+    [HttpGet]
+    [Route("{personName}")]
+    public ActionResult<IEnumerable<SalesByPersonAndYear>> GetByPersonName(string personName)
+    {
+      var result = GetSaleQueryData().Where(data => data.FullName.Contains(personName, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+      return result;
+    }
+
+    [HttpGet]
+    [Route("{year:int}")]
+    public ActionResult<IEnumerable<SalesByPersonAndYear>> GetByYear(int year)
+    {
+      var result = GetSaleQueryData().Where(data => DateOnly.Parse(data.Date).Year == year).ToList();
+
+      return result;
+    }
+
+
+    [HttpGet]
+    [Route("")]
+    public ActionResult<IEnumerable<SalesByPersonAndYear>> GetAll()
+    {
+      return GetSaleQueryData();
+    }
+
+    private List<SalesByPersonAndYear> GetSaleQueryData()
     {
 
       var result = _context.SalesPeople
@@ -110,41 +137,33 @@ namespace CodingBasics.Controllers
         p => p.BusinessEntityId,
         (joined, p) => new
         {
-          joined.SalesPerson.BusinessEntityId,
+          joined.SalesOrderHeader.SalesOrderId,
           FullName = p.FirstName + " " + (p.MiddleName ?? "") + " " + p.LastName,
           joined.Employee.JobTitle,
           joined.SalesTerritory.Name,
-          TotalSales = joined.SalesOrderHeader.SubTotal,
-          Year = joined.SalesOrderHeader.OrderDate.Year
+          joined.SalesOrderHeader.SubTotal,
+          joined.SalesOrderHeader.OrderDate
+        }).GroupBy(joined => new
+        {
+          joined.SalesOrderId,
+          joined.FullName,
+          joined.JobTitle,
+          joined.Name,
+          joined.SubTotal,
+          joined.OrderDate
         })
-    .Where(joined => EF.Functions.Like(joined.FullName, $"%{personName}%") && joined.Year == year)
-    .GroupBy(joined => new
-    {
-      joined.BusinessEntityId,
-      joined.FullName,
-      joined.JobTitle,
-      joined.Name,
-      joined.Year
-    })
     .Select(grouped => new SalesByPersonAndYear
     {
-      SalesPersonId = grouped.Key.BusinessEntityId,
+      SalesOrderId = grouped.Key.SalesOrderId,
       FullName = grouped.Key.FullName,
       JobTitle = grouped.Key.JobTitle,
       SalesTerritory = grouped.Key.Name,
-      TotalSales = grouped.Sum(x => x.TotalSales),
-      Year = grouped.Key.Year
+      SubTotal = grouped.Key.SubTotal,
+      Date = grouped.Key.OrderDate.ToShortDateString()
     })
     .ToList();
 
-
-      if (result == null || result.Count == 0)
-      {
-        return NotFound();
-      }
-
       return result;
     }
-
   }
 }
