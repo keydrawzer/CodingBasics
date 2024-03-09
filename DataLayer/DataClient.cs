@@ -27,6 +27,7 @@ public class DataClient
         return true;
     }
 
+    //Metodo generico
     public List<T>? GetResultsFromQuery<T>(string query, Func<IDataRecord,T> parseMethod){
         try
         {

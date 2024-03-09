@@ -1,42 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
-public class Program
+namespace CodingBasics
 {
-    private static void Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
-
-        builder.Services
-        .AddSingleton<DataClient>()
-        .AddSingleton<PersonService>()
-        .AddSingleton<ProductService>()
-        .AddCors(options =>
+        public static void Main(string[] args) 
         {
-            options.AddPolicy("AllowAll",
-                builder => builder
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod());
-        });
+            CreateHostBuilder(args).Build().Run();
+        }
 
-
-        var app = builder.Build();
-        app.UseCors("AllowAll");
-        //Test methods
-        app.MapGet("/", () => "Hello World!");
-        app.MapGet("/test", (DataClient dataClient) => dataClient.TestConnection());
-        //Person methods
-        app.MapGet("/person", (PersonService personService) => Results.Ok(personService.GetAll()));
-        app.MapGet("/person/GetByName", (PersonService personService, [FromQuery] string name) => Results.Ok(personService.GetPersonByName(name)));
-        app.MapGet("/person/GetByEmpType", (PersonService personService, [FromQuery] string emplType) => Results.Ok(personService.GetPersonByPersonType(emplType)));
-        app.MapGet("/person/GetByNameAndType", (PersonService personService, [FromQuery] string name, string emplType) 
-        => Results.Ok(personService.GetPersonByNameAndPersonType(name, emplType)));
-        //Products methods
-        app.MapGet("/product", (ProductService productService) => Results.Ok(productService.GetAll()));
-        app.MapGet("/product/GetByName", (ProductService productService, [FromQuery] string name) => Results.Ok(productService.GetProductsByName(name)));
-        app.MapGet("/product/GetByCatType", (ProductService productService, [FromQuery] string catType) => Results.Ok(productService.GetProductByCategoryType(catType)));
-        app.MapGet("/product/GetByNameAndType", (ProductService productService, [FromQuery] string name, string catType) 
-        => Results.Ok(productService.GetProductByNameAndCategoryType(name, catType)));
-        app.Run();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }
