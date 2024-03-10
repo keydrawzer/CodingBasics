@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CodingBasics.Models
 {
-    [Table("Employee", Schema = "HumanResources")]
+    [Table("vEmployee", Schema = "HumanResources")]
     public class Employee
     {
         [Key]
@@ -12,12 +12,12 @@ namespace CodingBasics.Models
         public string? FirstName { get; set; }
         public string? MiddleName { get; set; }
         public string? LastName { get; set; }
-        // public string? Suffix { get; set; }
-        // public string? JobTitle { get; set; }
+        public string? Suffix { get; set; }
+        public string? JobTitle { get; set; }
         public string? PhoneNumber { get; set; }
-        // public string? PhoneNumberType { get; set; }
+         public string? PhoneNumberType { get; set; }
         public string? EmailAddress { get; set; }
-        // public int EmailPromotion { get; set; }
+        public int EmailPromotion { get; set; }
         public string? AddressLine1 { get; set; }
         public string? AddressLine2 { get; set; }
         public string? City { get; set; }
